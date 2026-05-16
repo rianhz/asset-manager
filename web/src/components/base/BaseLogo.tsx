@@ -16,8 +16,8 @@ export default function BaseLogo(){
           border
           border-white/10
           bg-gradient-to-br
-          from-[var(--primary)]
-          to-[var(--upload)]
+          from-primary
+          to-upload
           shadow-lg
           shadow-blue-500/20
         "
@@ -45,7 +45,7 @@ export default function BaseLogo(){
           Asset Manager
         </h1>
 
-        <p className="text-sm text-[var(--muted-foreground)]">
+        <p className="text-sm text-muted-foreground">
           Modern media workspace
         </p>
       </div>

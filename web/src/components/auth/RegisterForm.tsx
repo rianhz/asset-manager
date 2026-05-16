@@ -3,24 +3,26 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterFormValues, registerSchema } from "@/src/features/auth/authValidator";
-
+import { useRegister } from "@/src/features/auth/hooks";
+import BaseButton from "../base/BaseButton";
 
 export default function RegisterForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
   });
 
+  const { mutate: registerMutation, isPending } = useRegister();
+
   const onSubmit = async (values: RegisterFormValues) => {
-    console.log(values);
+    registerMutation(values);
   };
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
       className="space-y-5"
     >
       <div>
@@ -36,19 +38,19 @@ export default function RegisterForm() {
             w-full
             rounded-2xl
             border
-            border-[var(--border)]
-            bg-[var(--surface-secondary)]
+            border-border
+            bg-surface-secondary
             px-4
             py-4
             outline-none
             transition-all
-            placeholder:text-[var(--muted-foreground)]
-            focus:border-[var(--primary)]
+            placeholder:text-muted-foreground
+            focus:border-primary
           "
         />
 
         {errors.name && (
-          <p className="mt-2 text-sm text-[var(--danger)]">
+          <p className="mt-2 text-sm text-danger">
             {errors.name.message}
           </p>
         )}
@@ -67,19 +69,19 @@ export default function RegisterForm() {
             w-full
             rounded-2xl
             border
-            border-[var(--border)]
-            bg-[var(--surface-secondary)]
+            border-border
+            bg-surface-secondary
             px-4
             py-4
             outline-none
             transition-all
-            placeholder:text-[var(--muted-foreground)]
-            focus:border-[var(--primary)]
+            placeholder:text-muted-foreground
+            focus:border-primary
           "
         />
 
         {errors.email && (
-          <p className="mt-2 text-sm text-[var(--danger)]">
+          <p className="mt-2 text-sm text-danger">
             {errors.email.message}
           </p>
         )}
@@ -98,19 +100,19 @@ export default function RegisterForm() {
             w-full
             rounded-2xl
             border
-            border-[var(--border)]
-            bg-[var(--surface-secondary)]
+            border-border
+            bg-surface-secondary
             px-4
             py-4
             outline-none
             transition-all
-            placeholder:text-[var(--muted-foreground)]
-            focus:border-[var(--primary)]
+            placeholder:text-muted-foreground
+            focus:border-primary
           "
         />
 
         {errors.password && (
-          <p className="mt-2 text-sm text-[var(--danger)]">
+          <p className="mt-2 text-sm text-danger">
             {errors.password.message}
           </p>
         )}
@@ -129,42 +131,27 @@ export default function RegisterForm() {
             w-full
             rounded-2xl
             border
-            border-[var(--border)]
-            bg-[var(--surface-secondary)]
+            border-border
+            bg-surface-secondary
             px-4
             py-4
             outline-none
             transition-all
-            placeholder:text-[var(--muted-foreground)]
-            focus:border-[var(--primary)]
+            placeholder:text-muted-foreground
+            focus:border-primary
           "
         />
 
         {errors.confirmPassword && (
-          <p className="mt-2 text-sm text-[var(--danger)]">
+          <p className="mt-2 text-sm text-danger">
             {errors.confirmPassword.message}
           </p>
         )}
       </div>
 
-      <button
-        disabled={isSubmitting}
-        type="submit"
-        className="
-          w-full
-          rounded-2xl
-          bg-[var(--primary)]
-          px-4
-          py-4
-          font-semibold
-          text-white
-          transition-all
-          hover:bg-[var(--primary-hover)]
-          disabled:opacity-50
-        "
-      >
-        {isSubmitting ? "Loading..." : "Create Account"}
-      </button>
+      <BaseButton onClick={handleSubmit(onSubmit)} disabled={isPending} loading={isPending}>
+        Create Account
+      </BaseButton>
     </form>
   );
 }

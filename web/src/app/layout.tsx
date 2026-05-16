@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import ReactQueryProvider from "@/src/providers/reactQueryProvider";
+import Toaster from "@/src/components/toaster/Toaster";
 
 export const metadata: Metadata = {
   title: "Asset Manager",
@@ -15,7 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ReactQueryProvider>{children}</ReactQueryProvider>
+        <ReactQueryProvider>
+          <Toaster />
+          {children}
+          </ReactQueryProvider>
       </body>
     </html>
   );

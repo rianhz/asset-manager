@@ -9,21 +9,29 @@ import {
 export const login = async (
   payload: LoginPayload
 ) => {
-  const response = await api.post<AuthResponse>(
-    "/auth/login",
-    payload
-  );
+  try {
+    const response = await api.post<AuthResponse>(
+      "/auth/login",
+      payload
+    );
 
-  return response.data;
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const register = async (
   payload: RegisterPayload
 ) => {
-  const response = await api.post<AuthResponse>(
-    "/auth/register",
-    payload
-  );
+  try {
+    const response = await api.post<AuthResponse>(
+      "/auth/register",
+      payload
+    );
 
-  return response.data;
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
