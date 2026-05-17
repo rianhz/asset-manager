@@ -1,12 +1,11 @@
 @import "tailwindcss";
-@import "@heroui/styles"; /* Core HeroUI layout stylesheets */
+@import "@heroui/styles";
 
 :root,
 .light,
 .default,
 [data-theme="light"],
 [data-theme="default"] {
-  /* Theme Colors (Light Mode) */
   --accent: oklch(78.00% 0.1600 225.00);
   --accent-foreground: oklch(15% 0.0300 225.00);
   --background: oklch(97.02% 0.0015 225.00);
@@ -39,19 +38,15 @@
   --warning: oklch(78.19% 0.1590 68.87);
   --warning-foreground: oklch(21.03% 0.0059 68.87);
 
-  /* Border Radius */
   --radius: 0.5rem;
   --field-radius: 0.75rem;
 
-  /* Font Family */
-  /* Make sure to load Geist font in your app */
   --font-sans: var(--font-geist);
 }
 
 .dark,
 [data-theme="dark"] {
   color-scheme: dark;
-  /* Theme Colors (Dark Mode) */
   --accent: oklch(78.00% 0.1600 225.00);
   --accent-foreground: oklch(15% 0.0300 225.00);
   --background: oklch(12.00% 0.0015 225.00);
@@ -85,7 +80,6 @@
   --warning-foreground: oklch(21.03% 0.0059 72.88);
 }
 
-/* 2. Map those variables to your standard Tailwind v4 theme utilities */
 @theme {
   --color-primary: var(--primary);
   --color-primary-hover: var(--accent-hover);

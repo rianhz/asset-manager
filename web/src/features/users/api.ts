@@ -4,7 +4,7 @@ import { AxiosError } from "axios";
 
 export const getProfile = async (userId: string) => {
   try {
-    const response = await api.get<UserResponse>(`/auth/profile/${userId}`);
+    const response = await api.get<UserResponse>(`/users/profile/${userId}`);
     return response.data.data;
   } catch (error) {
     if (error instanceof AxiosError) {

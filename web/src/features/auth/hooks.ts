@@ -4,6 +4,8 @@ import { toast } from "sonner";
 import { logout as logoutAction, setUser } from "@/src/lib/store/reducers/userSlice";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/src/lib/store/hooks/hooks";
+import { AuthResponse } from "./authTypes";
+import { getProfile } from "../users/api";
 
 
 export const useLogin = () => {
@@ -12,8 +14,9 @@ export const useLogin = () => {
   return useMutation({
     mutationFn: login,
 
-    onSuccess: data => {
-      dispatch(setUser(data.data));
+    onSuccess: async (data: AuthResponse) => {
+      const user = await getProfile(data.userId);
+      dispatch(setUser(user));
       router.push("/dashboard");
     },
 
@@ -49,7 +52,7 @@ export const useLogout = () => {
     },
 
     onError: error => {
-      console.error(error);
+      toast.error((error as any)?.response?.data?.message || error?.message);
     },
   });
 };

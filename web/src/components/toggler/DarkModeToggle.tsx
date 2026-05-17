@@ -1,6 +1,5 @@
 "use client";
 import {Moon,Sun} from '@gravity-ui/icons';
-import BaseButton from '../base/BaseButton';
 import { useTheme } from 'next-themes';
 import { Switch } from '@heroui/react';
 import { useEffect, useState } from 'react';

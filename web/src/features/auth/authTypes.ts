@@ -1,5 +1,3 @@
-import { IUser } from "@/src/types/users";
-
 export interface LoginPayload {
   email: string;
   password: string;
@@ -13,6 +11,7 @@ export interface RegisterPayload {
 }
 
 export interface AuthResponse {
-  data: IUser;
+  success: boolean;
+  userId: string;
   message: string;
 }

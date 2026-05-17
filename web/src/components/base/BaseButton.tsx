@@ -40,7 +40,6 @@ export default function BaseButton({
   size = "md",
 }: BaseButtonProps) {
   
-  // Dynamic color matching based on Tailwind v4 utility variables 
   const spinnerColor: Record<ButtonVariant, string> = {
     primary: "var(--primary-foreground)",
     secondary: "var(--secondary-foreground)",
@@ -48,7 +47,7 @@ export default function BaseButton({
     ghost: "currentColor", 
     danger: "#ffffff",
     "danger-soft": "var(--danger-soft-foreground)",
-    outline: "currentColor", // "currentColor" adapts to whatever the text color currently is
+    outline: "currentColor",
   };
 
   return (
@@ -56,7 +55,7 @@ export default function BaseButton({
       type={type}
       onPress={onClick}
       isDisabled={disabled || loading}
-      variant={variant as any} // Cast as any because "danger-soft" is a custom string variant
+      variant={variant as any}
       size={size}
       fullWidth={fullWidth}
       className={clsx(

@@ -9,18 +9,18 @@ export default function BaseLogo(){
         className="
           relative
           grid
-          h-14
-          w-14
+          h-10
+          w-10
           place-items-center
           overflow-hidden
           rounded-2xl
           border
-          border-white/10
+          border-gray-300
           from-primary
           to-upload
         "
       >
-        <Link href="/" className="text-2xl font-black">
+        <Link href="/" className="text-xl font-black">
           A
         </Link>
       </div>

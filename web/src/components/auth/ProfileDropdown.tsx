@@ -13,9 +13,7 @@ export const ProfileDropdown = () => {
      </Dropdown.Trigger>
 
       <Dropdown.Popover placement="bottom right">
-        <Dropdown.Menu
-          onAction={(key) => console.log(`Selected: ${key}`)}
-        >
+        <Dropdown.Menu>
           <Dropdown.Item id="profile" textValue="Profile">
             Profile
           </Dropdown.Item>
