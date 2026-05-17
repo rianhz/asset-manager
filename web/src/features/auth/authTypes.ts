@@ -1,3 +1,5 @@
+import { IUser } from "@/src/types/users";
+
 export interface LoginPayload {
   email: string;
   password: string;
@@ -11,11 +13,6 @@ export interface RegisterPayload {
 }
 
 export interface AuthResponse {
-  accessToken: string;
-
-  user: {
-    id: string;
-    name: string;
-    email: string;
-  };
+  data: IUser;
+  message: string;
 }

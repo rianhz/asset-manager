@@ -35,3 +35,15 @@ export const register = async (
     throw error;
   }
 };
+
+export const logout = async () => {
+  try {
+    const response = await api.post<AuthResponse>(
+      "/auth/logout"
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

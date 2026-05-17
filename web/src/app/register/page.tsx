@@ -1,16 +1,16 @@
 import RegisterForm from "@/src/components/auth/RegisterForm";
-import BaseLogo from "@/src/components/base/BaseLogo";
+import BaseButton from "@/src/components/base/BaseButton";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function RegisterPage() {
   return (
-    <main className="relative flex w-full items-center justify-center p-6">
+    <main className="relative flex w-full items-center justify-between gap-12 p-8">
 
-      {/* Left Side */}
-      <section className="relative hidden flex-1 flex-col justify-start gap-12 p-16 lg:flex">
+      <section className="relative hidden flex-1 flex-col justify-start gap-12 lg:flex">
         <div>
-          <BaseLogo />
 
-          <div className="mt-20 max-w-xl">
+          <div className="max-w-xl">
             <h2 className="text-6xl font-bold leading-tight tracking-tight">
               Start organizing your assets today.
             </h2>
@@ -23,8 +23,7 @@ export default function RegisterPage() {
         </div>
 
         <div className="mt-5 grid grid-cols-2 gap-5">
-            {/* Daily Uploads */}
-            <div className="rounded-3xl border border-border bg-surface p-5 transition-all duration-300 hover:-translate-y-1 hover:border-primary">
+            <div className="rounded-3xl border border-border bg-white dark:bg-surface p-5 shadow-lg transition-all duration-300 hover:-translate-y-1">
                 <p className="text-sm text-muted-foreground">
                 Daily Uploads
                 </p>
@@ -38,8 +37,7 @@ export default function RegisterPage() {
                 </p>
             </div>
 
-            {/* Active Workspaces */}
-            <div className="rounded-3xl border border-border bg-surface p-5 transition-all duration-300 hover:-translate-y-1 hover:border-upload">
+            <div className="rounded-3xl border border-border bg-white dark:bg-surface p-5 shadow-lg transition-all duration-300 hover:-translate-y-1">
                 <p className="text-sm text-muted-foreground">
                 Active Workspaces
                 </p>
@@ -61,8 +59,7 @@ export default function RegisterPage() {
                 </div>
             </div>
 
-            {/* Storage */}
-            <div className="rounded-3xl border border-border bg-surface p-5 transition-all duration-300 hover:-translate-y-1 hover:border-primary">
+            <div className="rounded-3xl border border-border bg-white dark:bg-surface p-5 shadow-lg transition-all duration-300 hover:-translate-y-1">
                 <div className="flex items-center justify-between">
                 <p className="text-sm text-muted-foreground">
                     Storage Capacity
@@ -82,8 +79,7 @@ export default function RegisterPage() {
                 </div>
             </div>
 
-            {/* Uptime */}
-            <div className="rounded-3xl border border-border bg-surface p-5 transition-all duration-300 hover:-translate-y-1 hover:border-green-500">
+            <div className="rounded-3xl border border-border bg-white dark:bg-surface p-5 shadow-lg transition-all duration-300 hover:-translate-y-1">
                 <p className="text-sm text-muted-foreground">
                 Platform Uptime
                 </p>
@@ -99,23 +95,20 @@ export default function RegisterPage() {
         </div>
       </section>
 
-      {/* Right Side */}
-      <section className="relative flex w-full items-center justify-center p-6 lg:max-w-xl">
-        <div className="w-full max-w-md rounded-[32px] border border-border bg-[rgba(17,24,39,0.8)] p-8 shadow-2xl backdrop-blur-xl">
+      <section className="relative flex items-center justify-center">
+        <div className="w-full max-w-md rounded-[32px] border border-border bg-white dark:bg-[rgba(17,24,39,0.8)] p-8 shadow-2xl backdrop-blur-xl">
           <div className="mb-8 text-center">
-            <h2 className="text-3xl font-bold">
+            <h2 className="text-3xl font-bold text-black dark:text-white">
               Create account
             </h2>
 
-            <p className="mt-2 text-muted-foreground">
+            <p className="mt-2 text-muted-foreground text-black dark:text-white">
               Start managing your assets smarter
             </p>
           </div>
 
-          <button className="flex w-full items-center justify-center gap-3 rounded-2xl border border-border bg-surface-secondary px-4 py-4 transition-all hover:bg-surface-hover">
-            Continue with Google
-          </button>
-
+          <RegisterForm />
+          
           <div className="my-6 flex items-center gap-4">
             <div className="h-px flex-1 bg-border" />
 
@@ -126,17 +119,21 @@ export default function RegisterPage() {
             <div className="h-px flex-1 bg-border" />
           </div>
 
-          <RegisterForm />
+          <BaseButton fullWidth variant="outline" size="lg">
+            <Image src={'/google.svg'} alt="Google" width={24} height={24} />
+            Continue with Google
+          </BaseButton>
+
 
           <p className="mt-8 text-center text-sm text-muted-foreground">
             Already have an account?{" "}
 
-            <a
+            <Link
               href="/login"
-              className="font-medium text-primary hover:underline"
+              className="font-medium text-blue-500 hover:underline"
             >
               Login
-            </a>
+            </Link>
           </p>
         </div>
       </section>

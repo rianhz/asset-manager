@@ -3,10 +3,23 @@ import jwt from 'jsonwebtoken';
 import { UserModel } from './users.model';
 import { IUser } from './users.interface';
 
+// Helper function to generate JWT token
+const generateToken = (userId: string, email: string): string => {
+    return jwt.sign(
+        { id: userId, email }, 
+        process.env.JWT_SECRET || 'secret', 
+        { expiresIn: '1d' }
+    );
+};
 
+// 1. Existing Register Service (Updated to handle potential Google conflicts)
 const registerService = async (email: string, password: string): Promise<Omit<IUser, 'passwordHash'>> => {
     const existingUser = await UserModel.findOne({ email }).lean();
     if (existingUser) {
+        // If they exist but signed up with Google previously
+        if (existingUser.googleId && !existingUser.passwordHash) {
+            throw new Error('This email is registered via Google. Please log in using Google.');
+        }
         throw new Error('Email is already registered');
     }
 
@@ -18,23 +31,70 @@ const registerService = async (email: string, password: string): Promise<Omit<IU
     return userWithoutPassword;
 };
 
+// 2. Existing Login Service (Updated to check for Google account locking)
 const loginService = async (email: string, password: string): Promise<{ user: Omit<IUser, 'passwordHash'>; token: string }> => {
     const user = await UserModel.findOne({ email }).lean();
     if (!user) {
-    throw new Error('Invalid email or password');
+        throw new Error('Invalid email or password');
+    }
+
+    // Guard: Prevent email/password login if they only set up Google
+    if (!user.passwordHash) {
+        throw new Error('This account uses Google Login. Please sign in with Google.');
     }
 
     const isPasswordMatch = await bcrypt.compare(password, user.passwordHash);
     if (!isPasswordMatch) {
-    throw new Error('Invalid email or password');
+        throw new Error('Invalid email or password');
     }
 
-    const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET || 'secret', {
-    expiresIn: '1d'
-    });
+    const token = generateToken((user._id).toString(), user.email);
 
     const { passwordHash: _, ...userWithoutPassword } = user;
     return { user: userWithoutPassword, token };
-}
+};
 
-export { registerService, loginService };
+// 3. NEW: Google Authentication Service (Handles both signup & login)
+const googleAuthService = async (googleData: { googleId: string; email: string; name: string; avatar?: string }): Promise<{ user: Omit<IUser, 'passwordHash'>; token: string }> => {
+    const { googleId, email, name, avatar } = googleData;
+
+    // Check if user already exists by Google ID or Email
+    let user = await UserModel.findOne({ 
+        $or: [{ googleId }, { email }] 
+    });
+
+    if (user) {
+        // Case: User registered with Email before, but is now trying to log in with Google
+        if (!user.googleId) {
+            user.googleId = googleId;
+            if (!user.avatar && avatar) user.avatar = avatar; // merge avatar if empty
+            await user.save();
+        }
+    } else {
+        // Case: Completely new user via Google
+        user = await UserModel.create({
+            email,
+            googleId,
+            name,
+            avatar
+        });
+    }
+
+    // Convert Mongoose Document to plain object
+    const userObj = user.toObject ? user.toObject() : user;
+    const token = generateToken((userObj._id).toString(), userObj.email);
+
+    const { passwordHash: _, ...userWithoutPassword } = userObj;
+    return { user: userWithoutPassword, token };
+};
+
+const getProfile = async (userId: string): Promise<IUser> => {
+    const user = await UserModel.findById(userId).lean();
+    if (!user) {
+        throw new Error('User not found');
+    }
+    const { passwordHash: _, ...userWithoutPassword } = user;
+    return userWithoutPassword;
+};
+
+export { registerService, loginService, googleAuthService, getProfile };

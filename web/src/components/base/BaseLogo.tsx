@@ -1,9 +1,10 @@
+import Link from "next/link";
+
 export default function BaseLogo(){
   return (
     <div
       className="inline-flex items-center gap-3"
     >
-      {/* Logo */}
       <div
         className="
           relative
@@ -15,39 +16,13 @@ export default function BaseLogo(){
           rounded-2xl
           border
           border-white/10
-          bg-gradient-to-br
           from-primary
           to-upload
-          shadow-lg
-          shadow-blue-500/20
         "
       >
-        {/* Grid Overlay */}
-        <div
-          className="
-            absolute
-            inset-0
-            bg-[linear-gradient(rgba(255,255,255,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.12)_1px,transparent_1px)]
-            bg-[size:10px_10px]
-            opacity-40
-          "
-        />
-
-        {/* Letter */}
-        <span className="relative text-2xl font-black text-white">
+        <Link href="/" className="text-2xl font-black">
           A
-        </span>
-      </div>
-
-      {/* Text */}
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">
-          Asset Manager
-        </h1>
-
-        <p className="text-sm text-muted-foreground">
-          Modern media workspace
-        </p>
+        </Link>
       </div>
     </div>
   );

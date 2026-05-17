@@ -1,15 +1,14 @@
 import LoginForm from "@/src/components/auth/LoginForm";
-import BaseLogo from "@/src/components/base/BaseLogo";
+import BaseButton from "@/src/components/base/BaseButton";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function LoginPage() {
   return (
-    <main className="relative flex w-full items-center justify-center p-6">
-      {/* Left Side */}
-      <section className="relative hidden flex-1 flex-col justify-start gap-12 p-16 lg:flex">
+    <main className="relative flex w-full items-center justify-between gap-12 p-8">
+      <section className="relative hidden flex-1 flex-col justify-start gap-12 lg:flex">
         <div>
-          <BaseLogo />
-
-          <div className="mt-20">
+          <div>
             <h2 className="text-6xl font-bold leading-tight tracking-tight">
               Manage your assets  <br /> smarter.
             </h2>
@@ -20,10 +19,9 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Stats */}
         <div className="mt-5 grid grid-cols-2 gap-5">
-            <div className="rounded-3xl border border-border bg-surface p-5">
-                <p className="text-sm text-muted-foreground">
+            <div className="rounded-3xl border border-border bg-white dark:bg-surface p-5 shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <p className="text-sm text-muted-foreground ">
                 Uploads Today
                 </p>
 
@@ -31,12 +29,12 @@ export default function LoginPage() {
                 842
                 </h3>
 
-                <p className="mt-2 text-sm text-green-400">
+                <p className="mt-2 text-sm text-green-800 dark:text-green-400">
                 +18% from yesterday
                 </p>
             </div>
 
-            <div className="rounded-3xl border border-border bg-surface p-5">
+            <div className="rounded-3xl border border-border bg-white dark:bg-surface p-5 shadow-lg transition-all duration-300 hover:-translate-y-1">
                 <p className="text-sm text-muted-foreground">
                 Team Members
                 </p>
@@ -54,8 +52,8 @@ export default function LoginPage() {
                 </div>
             </div>
 
-            <div className="rounded-3xl border border-border bg-surface p-5">
-                <p className="text-sm text-muted-foreground">
+            <div className="rounded-3xl border border-border bg-white dark:bg-surface p-5 shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                 Storage Remaining
                 </p>
 
@@ -63,16 +61,15 @@ export default function LoginPage() {
                 872 GB
                 </h3>
 
-                <div className="mt-4 h-2 rounded-full bg-surface-secondary">
+                <div className="mt-4 h-2 rounded-full bg-surface-secondary dark:bg-surface-secondary">
                 <div className="h-2 w-[38%] rounded-full bg-upload" />
                 </div>
             </div>
         </div>
       </section>
 
-      {/* Right Side */}
-      <section className="relative flex w-full items-center justify-center p-6 lg:max-w-xl">
-        <div className="w-full max-w-md rounded-[32px] border border-border bg-[rgba(17,24,39,0.8)] p-8 shadow-2xl backdrop-blur-xl">
+      <section className="relative flex items-center justify-center">
+        <div className="w-full max-w-md rounded-[32px] border border-border bg-white dark:bg-[rgba(17,24,39,0.8)] p-8 shadow-2xl backdrop-blur-xl">
           <div className="mb-8 text-center">
             <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-3xl bg-primary text-2xl font-bold text-white">
               A
@@ -99,19 +96,20 @@ export default function LoginPage() {
             <div className="h-px flex-1 bg-border" />
           </div>
 
-          <button className="flex w-full items-center justify-center gap-3 rounded-2xl border border-border bg-surface-secondary px-4 py-4 transition-all hover:bg-surface-hover">
+          <BaseButton fullWidth variant="outline" size="lg">
+            <Image src={'/google.svg'} alt="Google" width={24} height={24} />
             Continue with Google
-          </button>
+          </BaseButton>
 
           <p className="mt-8 text-center text-sm text-muted-foreground">
             Don&apos;t have an account?{" "}
 
-            <a
+            <Link
               href="/register"
-              className="font-medium text-primary hover:underline"
+              className="font-medium text-blue-500 hover:underline"
             >
               Register
-            </a>
+            </Link>
           </p>
         </div>
       </section>

@@ -29,10 +29,11 @@ export default function LoginForm() {
 
   return (
     <form
-      className="space-y-5"
+      className="space-y-4 dark:text-white min-w-96"
+      onSubmit={handleSubmit(onSubmit)}
     >
       <div>
-        <label className="mb-2 block text-sm font-medium">
+        <label className="mb-2 block text-sm font-medium text-muted-foreground dark:text-white">
           Email
         </label>
 
@@ -45,7 +46,7 @@ export default function LoginForm() {
             rounded-2xl
             border
             border-border
-            bg-surface-secondary
+            bg-white dark:bg-surface-secondary
             px-4
             py-4
             outline-none
@@ -63,7 +64,7 @@ export default function LoginForm() {
       </div>
 
       <div>
-        <label className="mb-2 block text-sm font-medium">
+        <label className="mb-2 block text-sm font-medium text-muted-foreground dark:text-white">
           Password
         </label>
 
@@ -76,7 +77,7 @@ export default function LoginForm() {
             rounded-2xl
             border
             border-border
-            bg-surface-secondary
+            bg-white dark:bg-surface-secondary
             px-4
             py-4
             outline-none
@@ -93,7 +94,7 @@ export default function LoginForm() {
         )}
       </div>
 
-      <BaseButton onClick={handleSubmit(onSubmit)} disabled={isPending} loading={isPending}>
+      <BaseButton onClick={handleSubmit(onSubmit)} fullWidth disabled={isPending} loading={isPending} size="lg">
         Login
       </BaseButton>
     </form>
