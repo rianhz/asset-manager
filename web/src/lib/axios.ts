@@ -14,14 +14,6 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response && error.response.status === 401) {
-      console.log("Token expired or invalid. Logging out...");
-
-      if (typeof window !== "undefined") {
-        window.location.href = "/login";
-      }
-    }
-
     return Promise.reject(error);
   }
 );

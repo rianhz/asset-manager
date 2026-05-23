@@ -15,7 +15,7 @@ export const useLogin = () => {
     mutationFn: login,
 
     onSuccess: async (data: AuthResponse) => {
-      const user = await getProfile(data.userId);
+      const user = await getProfile();
       dispatch(setUser(user));
       router.push("/dashboard");
     },
@@ -27,11 +27,13 @@ export const useLogin = () => {
 };
 
 export const useRegister = () => {
+  const router = useRouter();
   return useMutation({
     mutationFn: register,
 
     onSuccess: () => {
       toast.success("Account created successfully");
+      router.push("/login");
     },
 
     onError: error => {

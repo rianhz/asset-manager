@@ -38,11 +38,10 @@ export const register = async (
 
 export const logout = async () => {
   try {
-    const response = await api.post<AuthResponse>(
+    await api.post<void>(
       "/auth/logout"
     );
 
-    return response.data;
   } catch (error) {
     throw error;
   }

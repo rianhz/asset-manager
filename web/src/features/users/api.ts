@@ -2,9 +2,9 @@ import { api } from "@/src/lib/axios";
 import { UserResponse } from "./userTypes";
 import { AxiosError } from "axios";
 
-export const getProfile = async (userId: string) => {
+export const getProfile = async () => {
   try {
-    const response = await api.get<UserResponse>(`/users/profile/${userId}`);
+    const response = await api.get<UserResponse>(`/users/profile`);
     return response.data.data;
   } catch (error) {
     if (error instanceof AxiosError) {

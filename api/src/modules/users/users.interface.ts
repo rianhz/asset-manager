@@ -13,4 +13,9 @@ export interface IUser {
     createdAt: Date;
     updatedAt: Date;
     assetIntegrations: Array<IntegrationType>;
+    refreshToken?: {
+        token: string;
+        expiresIn: number;
+        createdAt: Date;
+    }
 }

@@ -1,15 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import { registerService, loginService, googleAuthService, getProfile } from './authentication.service';
+import { registerService, loginService, googleAuthService, logoutService } from './authentication.service';
+import { ACCESS_COOKIE_OPTIONS, REFRESH_COOKIE_OPTIONS } from '../../utils/constant';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 
-// Helper config for cookie settings to avoid repetition
-const COOKIE_OPTIONS = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax' as const,
-    maxAge: 24 * 60 * 60 * 1000 // 1 day
-};
 
-// 1. REGISTER CONTROLLER
 export const registerController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const { email, password } = req.body;
@@ -26,7 +20,6 @@ export const registerController = async (req: Request, res: Response, next: Next
     }
 };
 
-// 2. LOGIN CONTROLLER (Updated to use cookies, matching Google OAuth)
 export const loginController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const { email, password } = req.body;
@@ -36,25 +29,34 @@ export const loginController = async (req: Request, res: Response, next: NextFun
             return;
         }
 
-        const { userId, token } = await loginService(email, password);
+        const { accessToken, refreshToken } = await loginService(email, password);
 
-        // Set the JWT token inside an HttpOnly cookie
-        res.cookie('token', token, COOKIE_OPTIONS);
+        res.cookie('accessToken', accessToken, ACCESS_COOKIE_OPTIONS);
+        res.cookie('refreshToken', refreshToken, REFRESH_COOKIE_OPTIONS);
 
-        // Return user data without exposing the token in the body
         res.status(200).json({ 
             success: true,
-            userId: userId 
         });
     } catch (error: any) {
         res.status(401).json({ success: false, message: error.message });
     }
 };
 
-// 3. GOOGLE CALLBACK CONTROLLER (Fixed with safety guards)
+export const logoutController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const decoded = jwt.verify(req.cookies.accessToken, process.env.JWT_ACCESS_SECRET as string) as JwtPayload;
+        await logoutService(decoded.id);
+
+        res.clearCookie('accessToken');
+        res.clearCookie('refreshToken');
+        res.status(200).json({ success: true, message: 'Logged out successfully' });
+    } catch (error: any) {
+        res.status(401).json({ success: false, message: error.message });
+    }
+};
+
 export const googleCallbackController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        // Guard clause in case passport authentication failed silently
         if (!(req as any).user) {
             return res.redirect(`${process.env.FRONTEND_URL}/login?error=Google%20auth%20failed`);
         }
@@ -68,26 +70,14 @@ export const googleCallbackController = async (req: Request, res: Response, next
             avatar: profile.photos?.[0]?.value
         };
 
-        const { token } = await googleAuthService(googleData);
+        const { accessToken, refreshToken } = await googleAuthService(googleData);
 
-        // Set token as HttpOnly cookie so Next.js frontend can access it safely
-        res.cookie('token', token, COOKIE_OPTIONS);
+        res.cookie('accessToken', accessToken, ACCESS_COOKIE_OPTIONS);
+        res.cookie('refreshToken', refreshToken, REFRESH_COOKIE_OPTIONS);
 
-        // Redirect back to your Next.js application dashboard
         return res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
         
     } catch (error: any) {
         return res.redirect(`${process.env.FRONTEND_URL}/login?error=${encodeURIComponent(error.message)}`);
-    }
-};
-
-export const getProfileController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-
-        const userId = req.params.userId;
-        const profile = await getProfile(userId as string);
-        res.status(200).json({ success: true, data: profile });
-    } catch (error: any) {
-        res.status(400).json({ success: false, message: error.message });
     }
 };

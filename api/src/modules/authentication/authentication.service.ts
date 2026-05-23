@@ -1,13 +1,11 @@
 import bcrypt from 'bcryptjs';
-import { generateToken } from '../../helpers/auth-helper';
+import { generateAccessToken, generateRefreshToken } from '../../helpers/auth-helper';
 import { UserModel } from '../users/users.model';
 import { IUser } from '../users/users.interface';
 
-// 1. Existing Register Service (Updated to handle potential Google conflicts)
 const registerService = async (email: string, password: string): Promise<void> => {
     const existingUser = await UserModel.findOne({ email }).lean();
     if (existingUser) {
-        // If they exist but signed up with Google previously
         if (existingUser.googleId && !existingUser.passwordHash) {
             throw new Error('This email is registered via Google. Please log in using Google.');
         }
@@ -18,14 +16,12 @@ const registerService = async (email: string, password: string): Promise<void> =
     await UserModel.create({ email, passwordHash });
 };
 
-// 2. Existing Login Service (Updated to check for Google account locking)
-const loginService = async (email: string, password: string): Promise<{ userId: string; token: string }> => {
+const loginService = async (email: string, password: string): Promise<{ accessToken: string, refreshToken: string }> => {
     const user = await UserModel.findOne({ email }).lean();
     if (!user) {
         throw new Error('Invalid email or password');
     }
 
-    // Guard: Prevent email/password login if they only set up Google
     if (!user.passwordHash) {
         throw new Error('This account uses Google Login. Please sign in with Google.');
     }
@@ -35,29 +31,40 @@ const loginService = async (email: string, password: string): Promise<{ userId: 
         throw new Error('Invalid email or password');
     }
 
-    const token = generateToken((user._id).toString(), user.email);
+    const fifteenMinutes = 1 * 60;
+    const thirtyDays = 30 * 24 * 60 * 60;
 
-    return { userId: user._id.toString(), token };
+    const accessToken = generateAccessToken((user._id).toString(), fifteenMinutes); 
+    const refreshToken = generateRefreshToken((user._id).toString(), thirtyDays);
+    const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
+
+    await UserModel.findByIdAndUpdate(user._id, { 
+        $set: { 
+            refreshToken: { 
+                token: hashedRefreshToken, 
+                expiresIn: thirtyDays, 
+                createdAt: new Date() 
+            } 
+        } 
+    });
+
+    return { accessToken, refreshToken };
 };
 
-// 3. NEW: Google Authentication Service (Handles both signup & login)
-const googleAuthService = async (googleData: { googleId: string; email: string; name: string; avatar?: string }): Promise<{ user: Omit<IUser, 'passwordHash'>; token: string }> => {
+const googleAuthService = async (googleData: { googleId: string; email: string; name: string; avatar?: string }): Promise<{ user: Omit<IUser, 'passwordHash'>; accessToken: string, refreshToken: string }> => {
     const { googleId, email, name, avatar } = googleData;
 
-    // Check if user already exists by Google ID or Email
     let user = await UserModel.findOne({ 
         $or: [{ googleId }, { email }] 
     });
 
     if (user) {
-        // Case: User registered with Email before, but is now trying to log in with Google
         if (!user.googleId) {
             user.googleId = googleId;
             if (!user.avatar && avatar) user.avatar = avatar; // merge avatar if empty
             await user.save();
         }
     } else {
-        // Case: Completely new user via Google
         user = await UserModel.create({
             email,
             googleId,
@@ -66,21 +73,22 @@ const googleAuthService = async (googleData: { googleId: string; email: string; 
         });
     }
 
-    // Convert Mongoose Document to plain object
     const userObj = user.toObject ? user.toObject() : user;
-    const token = generateToken((userObj._id).toString(), userObj.email);
+    const accessToken = generateAccessToken((userObj._id).toString(), 15); 
+    const refreshToken = generateRefreshToken((userObj._id).toString(), 30); 
 
     const { passwordHash: _, ...userWithoutPassword } = userObj;
-    return { user: userWithoutPassword, token };
+    return { user: userWithoutPassword, accessToken, refreshToken };
 };
 
-const getProfile = async (userId: string): Promise<IUser> => {
-    const user = await UserModel.findById(userId).lean();
+const logoutService = async (userId: string): Promise<void> => {
+    const user = await UserModel.findById(userId);
     if (!user) {
         throw new Error('User not found');
     }
-    const { passwordHash: _, ...userWithoutPassword } = user;
-    return userWithoutPassword;
+
+    await UserModel.findByIdAndUpdate(userId, { $set: { refreshToken: { token: null, expiresIn: null, createdAt: null } } });
 };
 
-export { registerService, loginService, googleAuthService, getProfile };
+
+export { registerService, loginService, googleAuthService, logoutService };
