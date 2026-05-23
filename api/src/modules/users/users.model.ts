@@ -8,6 +8,11 @@ export const UserSchema = new Schema<IUser>({
   name: { type: String, required: false, default: null },
   avatar: { type: String, required: false, default: null },
   assetIntegrations: { type: [String], default: [] },
+  refreshToken: {
+    token: { type: String, required: false, default: null },
+    expiresIn: { type: Number, required: false, default: null },
+    createdAt: { type: Date, required: false, default: null },
+  },
 }, { timestamps: true });
 
 export const UserModel = model<IUser>('User', UserSchema);

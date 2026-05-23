@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@heroui/react";
+import { Button, Spinner } from "@heroui/react";
 import LoadingSpinner from "../loader/LoadingSpinner";
 import clsx from "clsx";
 
@@ -19,25 +19,25 @@ type ButtonVariant =
 interface BaseButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
-  disabled?: boolean;
   loading?: boolean;
   variant?: ButtonVariant;
   className?: string;
   fullWidth?: boolean;
   type?: "button" | "submit" | "reset";
   size?: "sm" | "md" | "lg";
+  isIconOnly?: boolean;
 }
 
 export default function BaseButton({
   children,
   onClick,
-  disabled = false,
   loading = false,
   variant = "primary",
   className,
   fullWidth = false,
   type = "button",
   size = "md",
+  isIconOnly = false,
 }: BaseButtonProps) {
   
   const spinnerColor: Record<ButtonVariant, string> = {
@@ -54,7 +54,6 @@ export default function BaseButton({
     <Button
       type={type}
       onPress={onClick}
-      isDisabled={disabled || loading}
       variant={variant as any}
       size={size}
       fullWidth={fullWidth}
@@ -63,11 +62,15 @@ export default function BaseButton({
         "flex items-center justify-center gap-2",
         className
       )}
+      isPending={loading}
+      isIconOnly={isIconOnly}
     >
-      {loading && (
-        <LoadingSpinner fill={spinnerColor[variant]} />
+      {({isPending}) => (
+        <>
+          {isPending ? <Spinner color="current" size="sm" /> : null}
+          {children}
+        </>
       )}
-      {children}
     </Button>
   );
 }

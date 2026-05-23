@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Toaster from "@/src/components/toaster/Toaster";
 import ReactQueryProvider from "../providers/ReactQueryProvider";
-import { RootThemeProvider } from "../providers/ThemeProvider";
-import { BaseLoggedInNavTop } from "../components/navbar/BaseLoggedInNavTop";
+import { ThemeProvider } from "../providers/ThemeProvider";
 import StoreProvider from "../providers/StoreProvider";
+import AuthProvider from "../providers/AuthProvider";
 
 export const metadata: Metadata = {
   title: "Asset Manager",
@@ -18,13 +18,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
+      <body suppressHydrationWarning>
         <ReactQueryProvider>
           <StoreProvider>
-            <RootThemeProvider>
-              <Toaster />
-              {children}
-            </RootThemeProvider>
+              <ThemeProvider>
+                <AuthProvider>
+                  <Toaster />
+                  {children}
+                </AuthProvider>
+              </ThemeProvider>
           </StoreProvider>
         </ReactQueryProvider>
       </body>

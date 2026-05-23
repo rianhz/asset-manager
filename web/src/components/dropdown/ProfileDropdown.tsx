@@ -1,8 +1,10 @@
 "use client";
 
+import { useLogout } from "@/src/features/auth/hooks";
 import { Dropdown, Avatar, Label } from "@heroui/react";
 
 export const ProfileDropdown = () => {
+  const { mutate: logout } = useLogout();
   return (
      <Dropdown>
      <Dropdown.Trigger>
@@ -22,7 +24,9 @@ export const ProfileDropdown = () => {
             Settings
           </Dropdown.Item>
 
-          <Dropdown.Item id="logout" textValue="Logout">
+          <Dropdown.Item id="logout" textValue="Logout" onClick={() => {
+            logout();
+          }}>
             <Label className="text-danger">Logout</Label>
           </Dropdown.Item>
         </Dropdown.Menu>

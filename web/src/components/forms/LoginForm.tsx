@@ -5,10 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginFormValues, loginSchema } from "@/src/features/auth/authValidator";
 import { useLogin } from "@/src/features/auth/hooks";
 import BaseButton from "../base/BaseButton";
-import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
-  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -20,11 +18,7 @@ export default function LoginForm() {
   const { mutate: loginMutation, isPending } = useLogin();
 
   const onSubmit = async (values: LoginFormValues) => {
-    loginMutation(values, {
-      onSuccess: () => {
-        router.push("/dashboard");
-      },
-    });
+    loginMutation(values);
   };
 
   return (
@@ -94,7 +88,7 @@ export default function LoginForm() {
         )}
       </div>
 
-      <BaseButton onClick={handleSubmit(onSubmit)} fullWidth disabled={isPending} loading={isPending} size="lg">
+      <BaseButton onClick={handleSubmit(onSubmit)} fullWidth loading={isPending} size="lg">
         Login
       </BaseButton>
     </form>

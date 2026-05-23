@@ -1,4 +1,4 @@
-import RegisterForm from "@/src/components/auth/RegisterForm";
+import RegisterForm from "@/src/components/forms/RegisterForm";
 import BaseButton from "@/src/components/base/BaseButton";
 import Image from "next/image";
 import Link from "next/link";

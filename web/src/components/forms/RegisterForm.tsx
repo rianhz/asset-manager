@@ -5,10 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterFormValues, registerSchema } from "@/src/features/auth/authValidator";
 import { useRegister } from "@/src/features/auth/hooks";
 import BaseButton from "../base/BaseButton";
-import { useRouter } from "next/navigation";
 
 export default function RegisterForm() {
-  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -20,11 +18,7 @@ export default function RegisterForm() {
   const { mutate: registerMutation, isPending } = useRegister();
 
   const onSubmit = async (values: RegisterFormValues) => {
-    registerMutation(values, {
-      onSuccess: () => {
-        router.push("/login");
-      },
-    });
+    registerMutation(values);
   };
 
   return (
@@ -156,7 +150,7 @@ export default function RegisterForm() {
         )}
       </div>
 
-      <BaseButton onClick={handleSubmit(onSubmit)} fullWidth disabled={isPending} loading={isPending} size="lg">
+      <BaseButton onClick={handleSubmit(onSubmit)} fullWidth loading={isPending} size="lg">
         Create Account
       </BaseButton>
     </form>
