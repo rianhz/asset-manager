@@ -78,7 +78,7 @@ Create `.env.local` files in both `api` and `web` directories:
 
 **api/.env.local**
 ```env
-PORT=5000
+PORT=your_port
 MONGO_URI=your_mongodb_connection_string
 JWT_ACCESS_SECRET=your_jwt_access_secret_key
 JWT_REFRESH_SECRET=your_jwt_refresh_secret_key
@@ -91,7 +91,7 @@ GOOGLE_CLIENT_SECRET=your_google_client_secret
 
 **web/.env.local**
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:5000
+NEXT_PUBLIC_API_URL=your_port
 ```
 
 ## Running Locally
