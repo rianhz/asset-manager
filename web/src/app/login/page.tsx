@@ -1,4 +1,4 @@
-import LoginForm from "@/src/components/auth/LoginForm";
+import LoginForm from "@/src/components/forms/LoginForm";
 import BaseButton from "@/src/components/base/BaseButton";
 import Link from "next/link";
 import Image from "next/image";

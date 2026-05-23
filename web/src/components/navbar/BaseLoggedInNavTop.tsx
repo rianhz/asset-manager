@@ -1,5 +1,5 @@
 "use client";
-import { ProfileDropdown } from "../auth/ProfileDropdown"
+import { ProfileDropdown } from "../dropdown/ProfileDropdown"
 import BaseLogo from "../base/BaseLogo"
 import { DarkModeToggle } from "../toggler/DarkModeToggle"
 
