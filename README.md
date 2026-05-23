@@ -4,7 +4,7 @@ A full-stack application for managing and organizing digital assets with an Expr
 
 ## Overview
 
-Asset Manager is a TypeScript-based web application that provides a comprehensive solution for uploading, managing, and organizing digital assets. The application features a monorepo structure with separate API and web packages.
+Asset Manager is a TypeScript-based web application that provides a comprehensive solution for uploading, managing, and organizing digital assets. The application features a monorepo structure with separate backend and frontend packages.
 
 ## Tech Stack
 
@@ -79,11 +79,14 @@ Create `.env.local` files in both `api` and `web` directories:
 **api/.env.local**
 ```env
 PORT=5000
-MONGODB_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret_key
-CLOUDINARY_NAME=your_cloudinary_name
-CLOUDINARY_API_KEY=your_cloudinary_api_key
-CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+MONGO_URI=your_mongodb_connection_string
+JWT_ACCESS_SECRET=your_jwt_access_secret_key
+JWT_REFRESH_SECRET=your_jwt_refresh_secret_key
+FRONTEND_URL=http://localhost:3000
+CANVA_CLIENT_ID=your_canva_client_id
+CANVA_CLIENT_SECRET=your_canva_client_secret
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
 ```
 
 **web/.env.local**
