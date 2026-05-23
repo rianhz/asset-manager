@@ -9,25 +9,32 @@ Asset Manager is a TypeScript-based web application that provides a comprehensiv
 ## Tech Stack
 
 ### Backend (API)
-- **Runtime**: Node.js
+- **Runtime**: Node.js (v18+)
 - **Framework**: Express.js (v5.2.1)
-- **Language**: TypeScript
-- **Database**: MongoDB (Mongoose v9.6.2)
-- **Authentication**: JSON Web Tokens (JWT)
-- **File Upload**: Multer
-- **Cloud Storage**: Cloudinary
-- **Security**: bcryptjs for password hashing
-- **Validation**: Zod
+- **Language**: TypeScript (v6.0.3)
+- **Database**: MongoDB with Mongoose (v9.6.2)
+- **Authentication**: JSON Web Tokens (jsonwebtoken v9.0.3)
+- **Password Hashing**: bcryptjs (v3.0.3) & bcrypt (v6.0.0)
+- **File Upload**: Multer (v2.1.1)
+- **Cloud Storage**: Cloudinary (v2.10.0)
+- **Validation**: Zod (v4.4.3)
+- **Security**: Helmet (v8.2.0), CORS (v2.8.6)
+- **HTTP Client**: Axios (v1.16.1)
+- **Development**: Nodemon (v3.1.14), tsx (v4.22.0), ts-node (v10.9.2)
 
 ### Frontend (Web)
 - **Framework**: Next.js (v16.2.6)
 - **UI Library**: React (v19.2.4)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS (v4)
-- **State Management**: TanStack React Query (v5.100.10)
-- **HTTP Client**: Axios
-- **Forms**: React Hook Form with Zod validation
-- **Notifications**: Sonner
+- **Language**: TypeScript (v5)
+- **Styling**: Tailwind CSS (v4), @tailwindcss/postcss (v4)
+- **State Management**: Redux Toolkit (v2.12.0), React Redux (v9.3.0), TanStack React Query (v5.100.10)
+- **HTTP Client**: Axios (v1.16.1)
+- **Forms**: React Hook Form (v7.76.0) with @hookform/resolvers (v5.2.2)
+- **Validation**: Zod (v4.4.3)
+- **Notifications**: Sonner (v2.0.7)
+- **UI Components**: HeroUI (v3.0.5), Gravity UI (v7.39.0), Gravity UI Icons (v2.18.0)
+- **Theming**: next-themes (v0.4.6)
+- **Development**: ESLint (v9), eslint-config-next (v16.2.6)
 
 ## Project Structure
 
