@@ -5,8 +5,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterFormValues, registerSchema } from "@/src/features/auth/authValidator";
 import { useRegister } from "@/src/features/auth/hooks";
 import BaseButton from "../base/BaseButton";
+import { useRouter } from "next/navigation";
 
 export default function RegisterForm() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -18,15 +20,20 @@ export default function RegisterForm() {
   const { mutate: registerMutation, isPending } = useRegister();
 
   const onSubmit = async (values: RegisterFormValues) => {
-    registerMutation(values);
+    registerMutation(values, {
+      onSuccess: () => {
+        router.push("/login");
+      },
+    });
   };
 
   return (
     <form
-      className="space-y-5"
+      className="space-y-4 dark:text-white min-w-96"
+      onSubmit={handleSubmit(onSubmit)}
     >
       <div>
-        <label className="mb-2 block text-sm font-medium">
+        <label className="mb-2 block text-sm font-medium text-muted-foreground dark:text-white">
           Name
         </label>
 
@@ -39,7 +46,7 @@ export default function RegisterForm() {
             rounded-2xl
             border
             border-border
-            bg-surface-secondary
+            bg-white dark:bg-surface-secondary
             px-4
             py-4
             outline-none
@@ -57,7 +64,7 @@ export default function RegisterForm() {
       </div>
 
       <div>
-        <label className="mb-2 block text-sm font-medium">
+        <label className="mb-2 block text-sm font-medium text-muted-foreground dark:text-white">
           Email
         </label>
 
@@ -70,7 +77,7 @@ export default function RegisterForm() {
             rounded-2xl
             border
             border-border
-            bg-surface-secondary
+            bg-white dark:bg-surface-secondary
             px-4
             py-4
             outline-none
@@ -88,7 +95,7 @@ export default function RegisterForm() {
       </div>
 
       <div>
-        <label className="mb-2 block text-sm font-medium">
+        <label className="mb-2 block text-sm font-medium text-muted-foreground dark:text-white">
           Password
         </label>
 
@@ -101,7 +108,7 @@ export default function RegisterForm() {
             rounded-2xl
             border
             border-border
-            bg-surface-secondary
+            bg-white dark:bg-surface-secondary
             px-4
             py-4
             outline-none
@@ -119,7 +126,7 @@ export default function RegisterForm() {
       </div>
 
       <div>
-        <label className="mb-2 block text-sm font-medium">
+        <label className="mb-2 block text-sm font-medium text-muted-foreground dark:text-white">
           Confirm Password
         </label>
 
@@ -132,7 +139,7 @@ export default function RegisterForm() {
             rounded-2xl
             border
             border-border
-            bg-surface-secondary
+            bg-white dark:bg-surface-secondary
             px-4
             py-4
             outline-none
@@ -149,7 +156,7 @@ export default function RegisterForm() {
         )}
       </div>
 
-      <BaseButton onClick={handleSubmit(onSubmit)} disabled={isPending} loading={isPending}>
+      <BaseButton onClick={handleSubmit(onSubmit)} fullWidth disabled={isPending} loading={isPending} size="lg">
         Create Account
       </BaseButton>
     </form>

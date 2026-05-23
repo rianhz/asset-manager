@@ -1,13 +1,31 @@
-import LoadingSpinner from "../loader/LoadingSpinner";
+"use client";
 
-type ButtonVariant = 'primary' | 'secondary' | 'outline';
+import { Button } from "@heroui/react";
+import LoadingSpinner from "../loader/LoadingSpinner";
+import clsx from "clsx";
+
+type ButtonVariant =
+
+  | "primary"
+  | "secondary"
+  | "tertiary"
+
+  | "outline"
+  | "ghost"
+  | "danger"
+
+  | "danger-soft";
 
 interface BaseButtonProps {
   children: React.ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
   disabled?: boolean;
   loading?: boolean;
   variant?: ButtonVariant;
+  className?: string;
+  fullWidth?: boolean;
+  type?: "button" | "submit" | "reset";
+  size?: "sm" | "md" | "lg";
 }
 
 export default function BaseButton({
@@ -15,36 +33,41 @@ export default function BaseButton({
   onClick,
   disabled = false,
   loading = false,
-  variant = 'primary', 
+  variant = "primary",
+  className,
+  fullWidth = false,
+  type = "button",
+  size = "md",
 }: BaseButtonProps) {
   
-  const baseClasses = "w-full flex items-center justify-center gap-2 rounded-2xl px-4 py-4 font-semibold transition-all disabled:opacity-50 disabled:pointer-events-none";
-
-  const variantStyles: Record<ButtonVariant, { classes: string; spinnerColor: string }> = {
-    primary: {
-      classes: "bg-primary text-white hover:bg-primary-hover",
-      spinnerColor: "#ffffff",
-    },
-    secondary: {
-      classes: "bg-secondary text-white hover:bg-secondary-hover",
-      spinnerColor: "#ffffff",
-    },
-    outline: {
-      classes: "bg-transparent border-2 border-primary text-primary hover:bg-primary hover:text-white",
-      spinnerColor: "#000000", 
-    },
+  const spinnerColor: Record<ButtonVariant, string> = {
+    primary: "var(--primary-foreground)",
+    secondary: "var(--secondary-foreground)",
+    tertiary: "#ffffff",
+    ghost: "currentColor", 
+    danger: "#ffffff",
+    "danger-soft": "var(--danger-soft-foreground)",
+    outline: "currentColor",
   };
 
-  const currentVariant = variantStyles[variant];
-
   return (
-    <button
-      onClick={onClick}
-      disabled={disabled || loading}
-      className={`${baseClasses} ${currentVariant.classes}`}
+    <Button
+      type={type}
+      onPress={onClick}
+      isDisabled={disabled || loading}
+      variant={variant as any}
+      size={size}
+      fullWidth={fullWidth}
+      className={clsx(
+        "rounded-2xl font-semibold transition-all",
+        "flex items-center justify-center gap-2",
+        className
+      )}
     >
-      {loading && <LoadingSpinner fill={currentVariant.spinnerColor} />}
-      <span>{children}</span>
-    </button>
+      {loading && (
+        <LoadingSpinner fill={spinnerColor[variant]} />
+      )}
+      {children}
+    </Button>
   );
 }

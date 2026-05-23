@@ -1,19 +1,28 @@
-import Link from "next/link";
+"use client";
+import { useRouter } from "next/navigation";
+import BaseButton from "../components/base/BaseButton";
+import { ArrowRight } from "@gravity-ui/icons";
 
 export default function Home() {
+  const router = useRouter();
   return (
-    <div className="flex min-h-screen items-center justify-center p-4 bg-surface text-foreground">
-      <main className="flex w-full justify-center flex-col items-center gap-4">
-        <h1 className="text-4xl font-bold">Asset Manager</h1>
-        <div className="flex gap-2">
-          <Link href="/login" className="bg-primary text-primary-foreground px-4 py-2 rounded-md">
-            Login
-          </Link>
-          <Link href="/register" className="bg-surface-secondary text-foreground px-4 py-2 rounded-md">
-            Register
-          </Link>
+    <main className="flex min-h-screen items-center justify-center">
+      <section className="flex w-full min-h-screen justify-center flex-col items-center gap-4 landing-top-section">
+        <div className="flex justify-center items-center flex-col gap-4">
+          <h1 className="text-4xl text-center font-bold">Master Your Digital Universe.</h1>
+          <p className="text-center max-w-2xl">
+            The ultimate command center for your image assets. Seamlessly sync, organize, and deploy across Canva, Google Drive, and beyond.
+          </p>
+          <div className="flex justify-center items-center gap-4 mt-6">
+            <BaseButton variant="primary" className="group" onClick={() => router.push("/login")}>
+              Get Started 
+              <ArrowRight className="w-4 h-4 transition-transform duration-200 ease-in-out group-hover:translate-x-1" />
+            </BaseButton>
+            <BaseButton variant="outline">Learn More</BaseButton>
+          </div>
         </div>
-      </main>
-    </div>
+
+      </section>
+    </main>
   );
 }

@@ -1,16 +1,23 @@
 import { useMutation } from "@tanstack/react-query";
-import { login, register } from "@/src/features/auth/api";
+import { login, logout, register } from "@/src/features/auth/api";
 import { toast } from "sonner";
+import { logout as logoutAction, setUser } from "@/src/lib/store/reducers/userSlice";
+import { useRouter } from "next/navigation";
+import { useAppDispatch } from "@/src/lib/store/hooks/hooks";
+import { AuthResponse } from "./authTypes";
+import { getProfile } from "../users/api";
+
 
 export const useLogin = () => {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
   return useMutation({
     mutationFn: login,
 
-    onSuccess: data => {
-      localStorage.setItem(
-        "accessToken",
-        data.accessToken
-      );
+    onSuccess: async (data: AuthResponse) => {
+      const user = await getProfile(data.userId);
+      dispatch(setUser(user));
+      router.push("/dashboard");
     },
 
     onError: error => {
@@ -34,14 +41,18 @@ export const useRegister = () => {
 };
 
 export const useLogout = () => {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
   return useMutation({
-    mutationFn: () => {
-      localStorage.removeItem("accessToken");
-      return Promise.resolve();
+    mutationFn: logout,
+
+    onSuccess: () => {
+      dispatch(logoutAction());
+      router.push("/login");
     },
 
     onError: error => {
-      console.error(error);
+      toast.error((error as any)?.response?.data?.message || error?.message);
     },
   });
 };

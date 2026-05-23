@@ -1,10 +1,13 @@
 import { Schema, model } from 'mongoose';
-import { IUserDocument } from './users.interface';
+import { IUser } from './users.interface';
 
-const UserSchema = new Schema<IUserDocument>({
+export const UserSchema = new Schema<IUser>({
   email: { type: String, required: true, unique: true, lowercase: true, trim: true },
   passwordHash: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now }
-});
+  googleId: { type: String, required: false, default: null },
+  name: { type: String, required: false, default: null },
+  avatar: { type: String, required: false, default: null },
+  assetIntegrations: { type: [String], default: [] },
+}, { timestamps: true });
 
-export const UserModel = model<IUserDocument>('User', UserSchema);
+export const UserModel = model<IUser>('User', UserSchema);

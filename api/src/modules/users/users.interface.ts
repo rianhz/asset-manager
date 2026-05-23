@@ -1,11 +1,16 @@
-import { Document } from 'mongoose';
-
-export interface IUser {
-  id?: string;
-  email: string;
-  passwordHash: string;
-  createdAt: Date;
+export enum IntegrationType {
+    CANVA = 'canva',
+    GOOGLE = 'google-drive',
 }
 
-// Extends Mongoose Document for database specific operations
-export interface IUserDocument extends IUser, Document {}
+export interface IUser {
+    _id: string;
+    email: string;
+    passwordHash?: string;
+    googleId?: string;    
+    name?: string;
+    avatar?: string;
+    createdAt: Date;
+    updatedAt: Date;
+    assetIntegrations: Array<IntegrationType>;
+}

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BaseLoggedInLayout from "@/src/components/layouts/BaseLoggedInLayout";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -11,9 +12,8 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <>
-    {children}
-    </>
-     
+      <BaseLoggedInLayout>
+        {children}
+      </BaseLoggedInLayout>
   );
 }

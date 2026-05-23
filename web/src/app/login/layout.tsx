@@ -1,4 +1,4 @@
-import BaseOuterLayout from "@/src/components/layouts/BaseOuterLayout";
+
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -12,9 +12,9 @@ export default function LoginLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <BaseOuterLayout>
-        {children}
-    </BaseOuterLayout>
+    <>
+      {children}
+    </>
   );
 }
 

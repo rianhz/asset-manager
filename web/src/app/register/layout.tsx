@@ -1,4 +1,3 @@
-import BaseOuterLayout from "@/src/components/layouts/BaseOuterLayout";
 import type { Metadata } from "next";
 
 
@@ -13,8 +12,8 @@ export default function RegisterLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <BaseOuterLayout>
+    <>
       {children}
-    </BaseOuterLayout>
+    </>
   );
 }
