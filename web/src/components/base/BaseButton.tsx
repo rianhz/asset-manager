@@ -26,6 +26,7 @@ interface BaseButtonProps {
   type?: "button" | "submit" | "reset";
   size?: "sm" | "md" | "lg";
   isIconOnly?: boolean;
+  rounded?: "rounded-2xl" | "rounded-lg" | "rounded-md" | "rounded-sm" | "rounded-none";
 }
 
 export default function BaseButton({
@@ -38,17 +39,8 @@ export default function BaseButton({
   type = "button",
   size = "md",
   isIconOnly = false,
+  rounded = "rounded-2xl",
 }: BaseButtonProps) {
-  
-  const spinnerColor: Record<ButtonVariant, string> = {
-    primary: "var(--primary-foreground)",
-    secondary: "var(--secondary-foreground)",
-    tertiary: "#ffffff",
-    ghost: "currentColor", 
-    danger: "#ffffff",
-    "danger-soft": "var(--danger-soft-foreground)",
-    outline: "currentColor",
-  };
 
   return (
     <Button
@@ -58,7 +50,8 @@ export default function BaseButton({
       size={size}
       fullWidth={fullWidth}
       className={clsx(
-        "rounded-2xl font-semibold transition-all",
+        rounded,
+        "font-semibold ",
         "flex items-center justify-center gap-2",
         className
       )}

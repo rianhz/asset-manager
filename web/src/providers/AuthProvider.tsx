@@ -2,37 +2,22 @@
 
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-
-import { useGetProfile } from "../features/users/hooks";
 import { logout, setUser } from "../lib/store/reducers/userSlice";
 
-import LoadingSpinner from "../components/loader/LoadingSpinner";
 
 export default function AuthProvider({
-  children,
+    children,
+    initialUser,
 }: {
-  children: React.ReactNode;
+    children: React.ReactNode;
+    initialUser: any;
 }) {
-  const dispatch = useDispatch();
 
-  const {
-    data: profile,
-    isLoading,
-  } = useGetProfile();
+    const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (profile) {
-      dispatch(setUser(profile));
+    if (initialUser) {
+        dispatch(setUser(initialUser));
     }
-  }, [dispatch, profile]);
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <LoadingSpinner size="lg" />
-      </div>
-    );
-  }
-
-  return <>{children}</>;
+    return <>{children}</>;
 }

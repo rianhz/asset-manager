@@ -1,10 +1,11 @@
-import { useMutation } from "@tanstack/react-query";
-import { login, logout, register } from "@/src/features/auth/api";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getMyProfile, login, logout, register } from "@/src/features/auth/api";
 import { toast } from "sonner";
 import { logout as logoutAction, setUser } from "@/src/lib/store/reducers/userSlice";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/src/lib/store/hooks/hooks";
 import { AuthResponse } from "./authTypes";
+import { IUser } from "@/src/types/users";
 import { getProfile } from "../users/api";
 
 
@@ -15,7 +16,7 @@ export const useLogin = () => {
     mutationFn: login,
 
     onSuccess: async (data: AuthResponse) => {
-      const user = await getProfile();
+      const user = await getMyProfile();
       dispatch(setUser(user));
       router.push("/dashboard");
     },
@@ -56,5 +57,15 @@ export const useLogout = () => {
     onError: error => {
       toast.error((error as any)?.response?.data?.message || error?.message);
     },
+  });
+};
+
+export const useGetMe = () => {
+  return useQuery<IUser | null, Error>({
+    queryKey: ["me"],
+    queryFn: async () => {
+      return await getProfile();
+    },
+    retry: false,
   });
 };

@@ -1,5 +1,7 @@
 @import "tailwindcss";
 @import "@heroui/styles";
+@import "uploadthing/tw/v4";
+
 
 :root,
 .light,
@@ -81,9 +83,9 @@
 }
 
 @theme {
-  --color-primary: var(--primary);
+  --color-primary: var(--accent);
   --color-primary-hover: var(--accent-hover);
-  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-foreground: var(--accent-foreground);
   
   --color-foreground: #f8fafc;
   --color-surface: #111827;
@@ -114,4 +116,76 @@ main, section {
 
 button {
   cursor: pointer;
+}
+
+[data-ut-element="button"].primary,
+[data-ut-element="button"][data-state="ready"].primary {
+  background-color: var(--accent) !important;
+  color: var(--accent-foreground) !important;
+}
+
+[data-ut-element="button"].ut-variant-danger,
+[data-ut-element="button"][data-state="ready"].ut-variant-danger {
+  background-color: var(--danger) !important;
+  color: var(--danger-foreground) !important;
+}
+
+[data-ut-element="button"].ut-variant-secondary,
+[data-ut-element="button"][data-state="ready"].ut-variant-secondary {
+  background-color: var(--secondary) !important;
+  color: var(--secondary-foreground) !important;
+}
+
+
+[data-ut-element="button"] {
+  border-radius: 30px !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+
+[data-ut-element="button"][data-state="uploading"]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: var(--progress-width);
+  background-color: rgba(255, 255, 255, 0.25) !important; 
+  transition: width 0.1s ease-out;
+  z-index: 0;
+}
+
+
+[data-ut-element="button"][data-state="uploading"]::after {
+  background-color: transparent !important;
+}
+
+[data-ut-element="button"]:focus-within {
+  --tw-ring-status: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.custom-upload-dropzone {
+  border-radius: 30px !important;
+  box-shadow: none !important;
+  outline: none !important;
+  background-color: transparent !important;
+  border: 1.5px solid var(--surface-foreground) !important;
+}
+
+.custom-upload-dropzone > label,
+.custom-upload-dropzone > label:hover {
+  color: inherit !important;
+}
+
+.custom-upload-dropzone [data-ut-element="allowed-content"] {
+  color: inherit !important;
+}
+
+.custom-upload-dropzone:focus-within {
+  --tw-ring-status: none !important;
+  box-shadow: none !important;
+  outline: none !important;
 }
