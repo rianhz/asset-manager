@@ -5,6 +5,7 @@ import { ThemeProvider } from "../providers/ThemeProvider";
 import StoreProvider from "../providers/StoreProvider";
 import ReactQueryProvider from "../providers/ReactQueryProvider";
 import AuthServerProvider from "../providers/AuthServerProvider";
+import "@uploadthing/react/styles.css";
 
 export const metadata: Metadata = {
   title: "Asset Manager",

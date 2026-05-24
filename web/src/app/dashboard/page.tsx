@@ -2,8 +2,8 @@
 
 export default function DashboardPage() {
   return (
-    <main className="flex min-h-screen items-center justify-center p-4">
-      <h1 className="text-4xl font-bold text-primary">Dashboard</h1>
+    <main className="flex flex-col gap-4 min-h-screen items-center justify-center p-4">
+      <h1 className="text-4xl font-bold">Dashboard</h1>
     </main>
   );
 }

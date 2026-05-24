@@ -5,6 +5,8 @@ import { logout as logoutAction, setUser } from "@/src/lib/store/reducers/userSl
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/src/lib/store/hooks/hooks";
 import { AuthResponse } from "./authTypes";
+import { IUser } from "@/src/types/users";
+import { getProfile } from "../users/api";
 
 
 export const useLogin = () => {
@@ -55,5 +57,15 @@ export const useLogout = () => {
     onError: error => {
       toast.error((error as any)?.response?.data?.message || error?.message);
     },
+  });
+};
+
+export const useGetMe = () => {
+  return useQuery<IUser | null, Error>({
+    queryKey: ["me"],
+    queryFn: async () => {
+      return await getProfile();
+    },
+    retry: false,
   });
 };

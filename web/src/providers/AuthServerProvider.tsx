@@ -12,11 +12,12 @@ export default async function AuthServerProvider({
 
     try {
 
-        const cookieStore = await cookies();
+    const cookieStore = await cookies();
 
         user = await getMyProfile({
             Cookie: cookieStore.toString(),
         });
+
 
     } catch (error) {
 

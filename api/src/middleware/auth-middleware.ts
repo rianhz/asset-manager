@@ -3,8 +3,14 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import { UserModel } from "../modules/users/users.model";
 import { generateAccessToken, generateRefreshToken } from "../helpers/auth-helper";
 import bcrypt from "bcryptjs";
-import { ACCESS_COOKIE_OPTIONS, ACCESS_TOKEN_EXPIRES_IN, ACCESS_TOKEN_SECRET, REFRESH_COOKIE_OPTIONS, REFRESH_TOKEN_EXPIRES_IN, REFRESH_TOKEN_SECRET } from "../utils/constant";
-
+import { 
+  ACCESS_COOKIE_OPTIONS, 
+  ACCESS_TOKEN_EXPIRES_IN, 
+  ACCESS_TOKEN_SECRET, 
+  REFRESH_COOKIE_OPTIONS, 
+  REFRESH_TOKEN_EXPIRES_IN, 
+  REFRESH_TOKEN_SECRET 
+} from "../utils/constant";
 
 export const protectRoute = async (
     req: Request,
@@ -14,8 +20,10 @@ export const protectRoute = async (
     try {
         const accessToken = req.cookies.accessToken;
         const refreshToken = req.cookies.refreshToken;
-        console.log("protectRoute accessToken", accessToken);
-        console.log("protectRoute refreshToken", refreshToken);
+        
+        console.log("--- protectRoute Hook Triggered ---");
+        console.log("Received Access Token:", !!accessToken);
+        console.log("Received Refresh Token:", !!refreshToken);
 
         if (accessToken) {
             try {
@@ -25,26 +33,24 @@ export const protectRoute = async (
                 ) as JwtPayload;
 
                 (req as any).user = decoded;
-
                 return next();
 
             } catch (error: any) {
-
                 if (error.name !== "TokenExpiredError") {
                     res.status(401).json({
                         success: false,
-                        message: "Invalid access token",
+                        message: "Invalid access token structure",
                     });
                     return;
                 }
+                console.log("Access Token expired. Dropping down to refresh validation...");
             }
         }
-    
 
         if (!refreshToken) {
             res.status(401).json({
                 success: false,
-                message: "Refresh token missing",
+                message: "Session expired. Refresh token missing",
             });
             return;
         }
@@ -54,17 +60,22 @@ export const protectRoute = async (
             REFRESH_TOKEN_SECRET
         ) as JwtPayload;
 
-        console.log("protectRoute decodedRefresh", decodedRefresh);
+        const userId = decodedRefresh.id || decodedRefresh._id || (typeof decodedRefresh === "string" ? decodedRefresh : null);
 
-        const userId = decodedRefresh.id;
+        if (!userId) {
+            console.error("Payload Extraction Failed. No clear user identification found.");
+            res.clearCookie("accessToken", ACCESS_COOKIE_OPTIONS);
+            res.clearCookie("refreshToken", REFRESH_COOKIE_OPTIONS);
+            res.status(401).json({ success: false, message: "Malformed session credentials" });
+            return;
+        }
 
         const user = await UserModel.findById(userId);
-        console.log("protectRoute user", user);
 
         if (!user || !user.refreshToken?.token) {
             res.status(401).json({
                 success: false,
-                message: "User session not found",
+                message: "User session not found or revoked",
             });
             return;
         }
@@ -74,41 +85,33 @@ export const protectRoute = async (
             user.refreshToken.token
         );
 
-        console.log("protectRoute isRefreshTokenMatch", isRefreshTokenMatch);
 
         if (!isRefreshTokenMatch) {
             await UserModel.findByIdAndUpdate(userId, {
-                $unset: {
-                    refreshToken: "",
-                },
+                $unset: { refreshToken: null },
             });
 
-            res.clearCookie("accessToken");
-            res.clearCookie("refreshToken");
+            res.clearCookie("accessToken", ACCESS_COOKIE_OPTIONS);
+            res.clearCookie("refreshToken", REFRESH_COOKIE_OPTIONS);
 
             res.status(401).json({
                 success: false,
-                message: "Invalid refresh token",
+                message: "Invalid session token security match",
             });
-
             return;
         }
 
-
         const newAccessToken = generateAccessToken(
-            userId,
+            userId.toString(),
             ACCESS_TOKEN_EXPIRES_IN
         );
 
         const newRefreshToken = generateRefreshToken(
-            userId,
+            userId.toString(),
             REFRESH_TOKEN_EXPIRES_IN,
         );
 
-        const hashedRefreshToken = await bcrypt.hash(
-            newRefreshToken,
-            10
-        );
+        const hashedRefreshToken = await bcrypt.hash(newRefreshToken, 10);
 
         await UserModel.findByIdAndUpdate(userId, {
             $set: {
@@ -120,30 +123,23 @@ export const protectRoute = async (
             },
         });
 
-        res.cookie(
-            "accessToken",
-            newAccessToken,
-            ACCESS_COOKIE_OPTIONS
-        );
+        res.cookie("accessToken", newAccessToken, ACCESS_COOKIE_OPTIONS);
+        res.cookie("refreshToken", newRefreshToken, REFRESH_COOKIE_OPTIONS);
 
-        res.cookie(
-            "refreshToken",
-            newRefreshToken,
-            REFRESH_COOKIE_OPTIONS
-        );
+        (req as any).user = { id: userId.toString() };
 
-        (req as any).user = decodedRefresh;
-
+        console.log("Tokens cycled successfully mid-flight! Forwarding request details.");
         next();
     } catch (error) {
-        console.error("protectRoute error:", error);
+        console.error("Fatal protectRoute breakdown crash:", error);
 
-        res.clearCookie("accessToken");
-        res.clearCookie("refreshToken");
+        // CRUCIAL: Pass options object configurations down to clear HttpOnly attributes correctly
+        res.clearCookie("accessToken", ACCESS_COOKIE_OPTIONS);
+        res.clearCookie("refreshToken", REFRESH_COOKIE_OPTIONS);
 
         res.status(401).json({
             success: false,
-            message: "Unauthorized",
+            message: "Unauthorized session tracking collapse",
         });
     }
 };

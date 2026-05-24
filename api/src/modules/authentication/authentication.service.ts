@@ -80,7 +80,7 @@ const googleAuthService = async (googleData: { googleId: string; email: string; 
 };
 
 const logoutService = async (userId: string): Promise<void> => {
-    await UserModel.findByIdAndUpdate(userId, { $set: { refreshToken: { token: null, expiresIn: null, createdAt: null } } });
+    await UserModel.findByIdAndUpdate(userId, { $set: { refreshToken: null } });
 };
 
 const meService = async (userId: string) => {
