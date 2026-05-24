@@ -7,6 +7,7 @@ import {
   AuthResponse,
 } from "@/src/features/auth/authTypes";
 import { IUser } from "@/src/types/users";
+import { UserResponse } from "../users/userTypes";
 
 export const login = async (
   payload: LoginPayload
@@ -55,14 +56,14 @@ export const getMyProfile = async (
 ) => {
   try {
 
-    const response = await api.get<IUser>(
+    const response = await api.get<UserResponse>(
       "/auth/me",
       {
         headers,
       }
     );
 
-    return response.data;
+    return response.data.data;
 
   } catch (error) {
     throw error;

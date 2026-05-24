@@ -1,22 +1,33 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export function middleware(request: NextRequest) {
-    const accessToken = request.cookies.get("accessToken");
+export function proxy(request: NextRequest) {
+
+    const accessToken =
+        request.cookies.get("accessToken");
+
+    const refreshToken =
+        request.cookies.get("refreshToken");
 
     const isAuthPage =
-        request.nextUrl.pathname.startsWith("/login") ||
-        request.nextUrl.pathname.startsWith("/register");
+        request.nextUrl.pathname.startsWith("/login")
 
     const isProtectedPage =
         request.nextUrl.pathname.startsWith("/dashboard");
 
-    if (!accessToken && isProtectedPage) {
+    if (
+        !accessToken &&
+        !refreshToken &&
+        isProtectedPage
+    ) {
         return NextResponse.redirect(
             new URL("/login", request.url)
         );
     }
 
-    if (accessToken && isAuthPage) {
+    if (
+        (accessToken || refreshToken) &&
+        isAuthPage
+    ) {
         return NextResponse.redirect(
             new URL("/dashboard", request.url)
         );
@@ -24,11 +35,3 @@ export function middleware(request: NextRequest) {
 
     return NextResponse.next();
 }
-
-export const config = {
-    matcher: [
-        "/dashboard/:path*",
-        "/login",
-        "/register",
-    ],
-};

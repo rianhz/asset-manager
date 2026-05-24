@@ -14,6 +14,8 @@ export const protectRoute = async (
     try {
         const accessToken = req.cookies.accessToken;
         const refreshToken = req.cookies.refreshToken;
+        console.log("protectRoute accessToken", accessToken);
+        console.log("protectRoute refreshToken", refreshToken);
 
         if (accessToken) {
             try {
@@ -52,9 +54,12 @@ export const protectRoute = async (
             REFRESH_TOKEN_SECRET
         ) as JwtPayload;
 
+        console.log("protectRoute decodedRefresh", decodedRefresh);
+
         const userId = decodedRefresh.id;
 
         const user = await UserModel.findById(userId);
+        console.log("protectRoute user", user);
 
         if (!user || !user.refreshToken?.token) {
             res.status(401).json({
@@ -68,6 +73,8 @@ export const protectRoute = async (
             refreshToken,
             user.refreshToken.token
         );
+
+        console.log("protectRoute isRefreshTokenMatch", isRefreshTokenMatch);
 
         if (!isRefreshTokenMatch) {
             await UserModel.findByIdAndUpdate(userId, {

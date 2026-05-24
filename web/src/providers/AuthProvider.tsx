@@ -15,15 +15,9 @@ export default function AuthProvider({
 
     const dispatch = useDispatch();
 
-    useEffect(() => {
-
-        if (initialUser) {
-            dispatch(setUser(initialUser));
-        } else {
-            dispatch(logout());
-        }
-
-    }, [dispatch, initialUser]);
+    if (initialUser) {
+        dispatch(setUser(initialUser));
+    }
 
     return <>{children}</>;
 }
