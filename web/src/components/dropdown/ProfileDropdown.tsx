@@ -1,36 +1,44 @@
+// components/ProfileDropdown.tsx
 "use client";
 
-import { useLogout } from "@/src/features/auth/hooks";
-import { Dropdown, Avatar, Label } from "@heroui/react";
+import { useLogout } from "@/features/auth/hooks";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const ProfileDropdown = () => {
   const { mutate: logout } = useLogout();
+
   return (
-     <Dropdown>
-     <Dropdown.Trigger>
+    <DropdownMenu>
+      <DropdownMenuTrigger className="cursor-pointer outline-none focus:outline-none rounded-full">
         <Avatar>
-          <Avatar.Image alt="John Doe" src="https://img.heroui.chat/image/avatar?w=400&h=400&u=3" />
-          <Avatar.Fallback>JD</Avatar.Fallback>
+          <AvatarImage alt="John Doe" src="https://img.heroui.chat/image/avatar?w=400&h=400&u=3" />
+          <AvatarFallback>JD</AvatarFallback>
         </Avatar>
-     </Dropdown.Trigger>
+      </DropdownMenuTrigger>
 
-      <Dropdown.Popover placement="bottom right">
-        <Dropdown.Menu>
-          <Dropdown.Item id="profile" textValue="Profile">
-            Profile
-          </Dropdown.Item>
-
-          <Dropdown.Item id="settings" textValue="Settings">
-            Settings
-          </Dropdown.Item>
-
-          <Dropdown.Item id="logout" textValue="Logout" onClick={() => {
-            logout();
-          }}>
-            <Label className="text-danger">Logout</Label>
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown.Popover>
-    </Dropdown>
+      <DropdownMenuContent align="end" className="w-48 p-1">
+        <DropdownMenuItem className="cursor-pointer rounded-lg font-medium">
+          Profile
+        </DropdownMenuItem>
+        
+        <DropdownMenuItem className="cursor-pointer rounded-lg font-medium">
+          Settings
+        </DropdownMenuItem>
+        
+        {/* Styled to perfectly match your danger-soft look */}
+        <DropdownMenuItem 
+          onClick={() => logout()}
+          className="cursor-pointer rounded-lg font-semibold mt-1 text-destructive focus:text-destructive focus:bg-destructive/10 transition-colors"
+        >
+          Logout
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };

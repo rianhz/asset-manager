@@ -1,8 +1,8 @@
 "use client";
 
 
-import { Loader2 } from "lucide-react"; // Shadcn's preferred lightweight spinner icon
-import { cn } from "@/lib/utils"; // Shadcn's internal class merger utility
+import { Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 type ButtonVariant =
@@ -40,11 +40,10 @@ export default function BaseButton({
   rounded = "rounded-2xl",
 }: BaseButtonProps) {
 
-  // Map your custom design tokens to Shadcn core variants or manual styles
   const variantMap: Record<ButtonVariant, "default" | "secondary" | "outline" | "ghost" | "destructive" | string> = {
     primary: "default",
     secondary: "secondary",
-    tertiary: "outline", // Fallback to outline style, tweak as needed
+    tertiary: "outline",
     outline: "outline",
     ghost: "ghost",
     danger: "destructive",
@@ -58,15 +57,13 @@ export default function BaseButton({
       type={type}
       onClick={onClick}
       disabled={loading}
-      // Pass standard variant name if matching Shadcn, otherwise pass default and override in className
       variant={typeof selectedVariant === "string" && !["default", "secondary", "outline", "ghost", "destructive"].includes(selectedVariant) ? "default" : (selectedVariant as any)}
-      size={size === "md" ? "default" : size} // Shadcn names medium size as "default"
+      size={size === "md" ? "default" : size}
       className={cn(
         rounded,
-        "font-semibold flex items-center justify-center gap-2",
+        "font-semibold flex items-center justify-center gap-2 cursor-pointer",
         fullWidth && "w-full",
         isIconOnly && "p-2 aspect-square min-w-10",
-        // Inject manual custom style strings (like danger-soft background overrides) safely
         typeof selectedVariant === "string" && !["default", "secondary", "outline", "ghost", "destructive"].includes(selectedVariant) && selectedVariant,
         className
       )}

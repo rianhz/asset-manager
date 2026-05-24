@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import BaseLoggedInLayout from "@/src/components/layouts/BaseLoggedInLayout";
+import BaseLoggedInLayout from "@/components/layouts/BaseLoggedInLayout";
 
 export const metadata: Metadata = {
   title: "Dashboard",

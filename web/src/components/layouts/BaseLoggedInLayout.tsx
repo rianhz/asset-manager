@@ -1,39 +1,26 @@
-// app/dashboard/layout.tsx
 "use client";
 
-import React, { useState } from "react";
-// import BaseLoggedInNavTop from "@/src/components/navbar/BaseLoggedInNavTop";
-// import DashboardSidebar from "@/src/components/sidebar/DashboardSidebar";
+import React from "react";
+import BaseLoggedInNavTop from "@/components/navbar/BaseLoggedInNavTop";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "../ui/app-sidebar";
 
 export default function BaseLoggedInLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // Shared state to toggle the sidebar menu open/closed on mobile viewports
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
   return (
-    <div className="relative flex h-screen w-screen flex-col overflow-hidden bg-background">
-      
-      {/* Top Fixed Navbar */}
-      {/* <DashboardNavbar 
-        isSidebarOpen={isSidebarOpen} 
-        setIsSidebarOpen={setIsSidebarOpen} 
-      /> */}
+    <SidebarProvider>
+      <AppSidebar />
 
-      {/* Main Container Area */}
-      <div className="flex h-full w-full overflow-hidden">
-        
-        {/* Left Side Sidebar */}
-        {/* <DashboardSidebar isSidebarOpen={isSidebarOpen} /> */}
+      <div className="flex min-h-screen flex-1 flex-col">
+        <BaseLoggedInNavTop />
 
-        {/* Scrollable Core Content Area */}
-        <main className="flex-1 overflow-y-auto p-6 md:p-10">
+        <main className="flex-1 overflow-y-auto p-6 md:p-10 w-full">
           {children}
         </main>
-        
       </div>
-    </div>
+    </SidebarProvider>
   );
 }

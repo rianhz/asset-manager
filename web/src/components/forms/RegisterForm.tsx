@@ -23,11 +23,11 @@ export default function RegisterForm() {
 
   return (
     <form
-      className="space-y-4 dark:text-white min-w-96"
+      className="space-y-4 min-w-96"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div>
-        <label className="mb-2 block text-sm font-medium text-muted-foreground dark:text-white">
+        <label className="mb-2 block text-sm font-medium text-muted-foreground">
           Name
         </label>
 
@@ -40,7 +40,6 @@ export default function RegisterForm() {
             rounded-2xl
             border
             border-border
-            bg-white dark:bg-surface-secondary
             px-4
             py-4
             outline-none
@@ -71,7 +70,6 @@ export default function RegisterForm() {
             rounded-2xl
             border
             border-border
-            bg-white dark:bg-surface-secondary
             px-4
             py-4
             outline-none
@@ -102,7 +100,6 @@ export default function RegisterForm() {
             rounded-2xl
             border
             border-border
-            bg-white dark:bg-surface-secondary
             px-4
             py-4
             outline-none
@@ -133,7 +130,6 @@ export default function RegisterForm() {
             rounded-2xl
             border
             border-border
-            bg-white dark:bg-surface-secondary
             px-4
             py-4
             outline-none

@@ -1,5 +1,5 @@
-import RegisterForm from "@/src/components/forms/RegisterForm";
-import BaseButton from "@/src/components/base/BaseButton";
+import RegisterForm from "@/components/forms/RegisterForm";
+import BaseButton from "@/components/base/BaseButton";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -7,7 +7,7 @@ export default function RegisterPage() {
   return (
     <main className="relative flex w-full items-center justify-between gap-12 p-8">
 
-      <section className="relative hidden flex-1 flex-col justify-start gap-12 lg:flex">
+      <section className="relative flex-1 flex-col justify-start gap-12">
         <div>
 
           <div className="max-w-xl">
@@ -23,7 +23,7 @@ export default function RegisterPage() {
         </div>
 
         <div className="mt-5 grid grid-cols-2 gap-5">
-            <div className="rounded-3xl border border-border bg-white dark:bg-surface p-5 shadow-lg transition-all duration-300 hover:-translate-y-1">
+            <div className="rounded-3xl border border-border p-5 shadow-lg transition-all duration-300 hover:-translate-y-1">
                 <p className="text-sm text-muted-foreground">
                 Daily Uploads
                 </p>
@@ -37,7 +37,7 @@ export default function RegisterPage() {
                 </p>
             </div>
 
-            <div className="rounded-3xl border border-border bg-white dark:bg-surface p-5 shadow-lg transition-all duration-300 hover:-translate-y-1">
+            <div className="rounded-3xl border border-border p-5 shadow-lg transition-all duration-300 hover:-translate-y-1">
                 <p className="text-sm text-muted-foreground">
                 Active Workspaces
                 </p>
@@ -59,7 +59,7 @@ export default function RegisterPage() {
                 </div>
             </div>
 
-            <div className="rounded-3xl border border-border bg-white dark:bg-surface p-5 shadow-lg transition-all duration-300 hover:-translate-y-1">
+            <div className="rounded-3xl border border-border p-5 shadow-lg transition-all duration-300 hover:-translate-y-1">
                 <div className="flex items-center justify-between">
                 <p className="text-sm text-muted-foreground">
                     Storage Capacity
@@ -79,7 +79,7 @@ export default function RegisterPage() {
                 </div>
             </div>
 
-            <div className="rounded-3xl border border-border bg-white dark:bg-surface p-5 shadow-lg transition-all duration-300 hover:-translate-y-1">
+            <div className="rounded-3xl border border-border p-5 shadow-lg transition-all duration-300 hover:-translate-y-1">
                 <p className="text-sm text-muted-foreground">
                 Platform Uptime
                 </p>
@@ -96,13 +96,13 @@ export default function RegisterPage() {
       </section>
 
       <section className="relative flex items-center justify-center">
-        <div className="w-full max-w-md rounded-[32px] border border-border bg-white dark:bg-[rgba(17,24,39,0.8)] p-8 shadow-2xl backdrop-blur-xl">
+        <div className="w-full max-w-md rounded-[32px] border border-border p-8 shadow-2xl backdrop-blur-xl">
           <div className="mb-8 text-center">
-            <h2 className="text-3xl font-bold text-black dark:text-white">
+            <h2 className="text-3xl font-bold">
               Create account
             </h2>
 
-            <p className="mt-2 text-muted-foreground text-black dark:text-white">
+            <p className="mt-2 text-muted-foreground">
               Start managing your assets smarter
             </p>
           </div>

@@ -20,7 +20,7 @@ export default function BaseLogo(){
           to-upload
         "
       >
-        <Link href="/" className="text-xl font-black">
+        <Link href="/" className="text-xl">
           A
         </Link>
       </div>
