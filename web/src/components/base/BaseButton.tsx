@@ -1,19 +1,17 @@
 "use client";
 
-import { Button, Spinner } from "@heroui/react";
-import LoadingSpinner from "../loader/LoadingSpinner";
-import clsx from "clsx";
+
+import { Loader2 } from "lucide-react"; // Shadcn's preferred lightweight spinner icon
+import { cn } from "@/lib/utils"; // Shadcn's internal class merger utility
+import { Button } from "@/components/ui/button";
 
 type ButtonVariant =
-
   | "primary"
   | "secondary"
   | "tertiary"
-
   | "outline"
   | "ghost"
   | "danger"
-
   | "danger-soft";
 
 interface BaseButtonProps {
@@ -42,28 +40,39 @@ export default function BaseButton({
   rounded = "rounded-2xl",
 }: BaseButtonProps) {
 
+  // Map your custom design tokens to Shadcn core variants or manual styles
+  const variantMap: Record<ButtonVariant, "default" | "secondary" | "outline" | "ghost" | "destructive" | string> = {
+    primary: "default",
+    secondary: "secondary",
+    tertiary: "outline", // Fallback to outline style, tweak as needed
+    outline: "outline",
+    ghost: "ghost",
+    danger: "destructive",
+    "danger-soft": "bg-destructive/10 text-destructive hover:bg-destructive/20",
+  };
+
+  const selectedVariant = variantMap[variant];
+
   return (
     <Button
       type={type}
-      onPress={onClick}
-      variant={variant as any}
-      size={size}
-      fullWidth={fullWidth}
-      className={clsx(
+      onClick={onClick}
+      disabled={loading}
+      // Pass standard variant name if matching Shadcn, otherwise pass default and override in className
+      variant={typeof selectedVariant === "string" && !["default", "secondary", "outline", "ghost", "destructive"].includes(selectedVariant) ? "default" : (selectedVariant as any)}
+      size={size === "md" ? "default" : size} // Shadcn names medium size as "default"
+      className={cn(
         rounded,
-        "font-semibold ",
-        "flex items-center justify-center gap-2",
+        "font-semibold flex items-center justify-center gap-2",
+        fullWidth && "w-full",
+        isIconOnly && "p-2 aspect-square min-w-10",
+        // Inject manual custom style strings (like danger-soft background overrides) safely
+        typeof selectedVariant === "string" && !["default", "secondary", "outline", "ghost", "destructive"].includes(selectedVariant) && selectedVariant,
         className
       )}
-      isPending={loading}
-      isIconOnly={isIconOnly}
     >
-      {({isPending}) => (
-        <>
-          {isPending ? <Spinner color="current" size="sm" /> : null}
-          {children}
-        </>
-      )}
+      {loading && <Loader2 className="h-4 w-4 animate-spin shrink-0" />}
+      {children}
     </Button>
   );
 }

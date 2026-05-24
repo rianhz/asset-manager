@@ -1,4 +1,4 @@
-import { api } from "@/src/lib/axios";
+import { api } from "@/lib/axios";
 import { UserResponse } from "./userTypes";
 import { AxiosError } from "axios";
 

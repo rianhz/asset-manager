@@ -1,4 +1,4 @@
-import { IUser } from "@/src/types/users";
+import { IUser } from "@/types/users";
 
 export interface UserResponse {
   success: boolean;

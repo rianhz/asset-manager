@@ -2,9 +2,9 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { RegisterFormValues, registerSchema } from "@/src/features/auth/authValidator";
-import { useRegister } from "@/src/features/auth/hooks";
-import BaseButton from "../base/BaseButton";
+import { RegisterFormValues, registerSchema } from "@/features/auth/authValidator";
+import { useRegister } from "@/features/auth/hooks";
+import BaseButton from "@/components/base/BaseButton";
 
 export default function RegisterForm() {
   const {
@@ -18,7 +18,7 @@ export default function RegisterForm() {
   const { mutate: registerMutation, isPending } = useRegister();
 
   const onSubmit = async (values: RegisterFormValues) => {
-    registerMutation(values);
+    registerMutation(values as any);
   };
 
   return (

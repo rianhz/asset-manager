@@ -1,12 +1,11 @@
-import { api } from "@/src/lib/axios";
+import { api } from "@/lib/axios";
 import { RawAxiosRequestHeaders } from "axios";
 
 import {
   LoginPayload,
   RegisterPayload,
   AuthResponse,
-} from "@/src/features/auth/authTypes";
-import { IUser } from "@/src/types/users";
+} from "@/features/auth/authTypes";
 import { UserResponse } from "../users/userTypes";
 
 export const login = async (

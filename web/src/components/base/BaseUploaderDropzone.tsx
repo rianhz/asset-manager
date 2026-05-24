@@ -1,8 +1,8 @@
 "use client";
 
-import type { OurFileRouter } from "@/src/app/api/uploadthing/core";
-import { UploadDropzone } from "@/src/lib/upload-thing/uploadThing";
-import { Spinner } from "@heroui/react";
+import type { OurFileRouter } from "@/app/api/uploadthing/core";
+import { UploadDropzone } from "@/lib/upload-thing/uploadThing";
+import { Loader2 } from "lucide-react";
 
 type ButtonVariant =
   | "primary"
@@ -44,7 +44,7 @@ export default function BaseUploaderDropzone({
           if (isUploading) {
             return (
               <div className="flex items-center gap-2">
-                <Spinner color="current" size="sm" />
+                <Loader2 className="w-4 h-4 animate-spin" />
                 <span>{uploadProgress}%</span>
               </div>
             );
@@ -54,7 +54,7 @@ export default function BaseUploaderDropzone({
             return buttonText;
           }
 
-          return <Spinner color="current" size="sm" />;
+          return <Loader2 className="w-4 h-4 animate-spin" />;
         },
       }}
       appearance={{

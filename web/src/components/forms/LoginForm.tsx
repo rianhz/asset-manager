@@ -2,9 +2,9 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoginFormValues, loginSchema } from "@/src/features/auth/authValidator";
-import { useLogin } from "@/src/features/auth/hooks";
-import BaseButton from "../base/BaseButton";
+import { LoginFormValues, loginSchema } from "@/features/auth/authValidator";
+import { useLogin } from "@/features/auth/hooks";
+import BaseButton from "@/components/base/BaseButton";
 
 export default function LoginForm() {
   const {
@@ -18,7 +18,7 @@ export default function LoginForm() {
   const { mutate: loginMutation, isPending } = useLogin();
 
   const onSubmit = async (values: LoginFormValues) => {
-    loginMutation(values);
+    loginMutation(values as any);
   };
 
   return (

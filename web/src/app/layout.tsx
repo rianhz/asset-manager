@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Toaster from "@/src/components/toaster/Toaster";
-import { ThemeProvider } from "../providers/ThemeProvider";
-import StoreProvider from "../providers/StoreProvider";
-import ReactQueryProvider from "../providers/ReactQueryProvider";
-import AuthServerProvider from "../providers/AuthServerProvider";
+import Toaster from "@/components/toaster/Toaster";
+import { ThemeProvider } from "@/providers/ThemeProvider";
+import StoreProvider from "@/providers/StoreProvider";
+import ReactQueryProvider from "@/providers/reactQueryProvider";
+import AuthServerProvider from "@/providers/AuthServerProvider";
 import "@uploadthing/react/styles.css";
+import { Geist } from "next/font/google";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
   title: "Asset Manager",
@@ -18,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={cn("font-sans", geist.variable)}>
       <body suppressHydrationWarning>
         <ReactQueryProvider>
           <StoreProvider>
