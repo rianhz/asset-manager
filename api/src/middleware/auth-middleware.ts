@@ -3,7 +3,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import { UserModel } from "../modules/users/users.model";
 import { generateAccessToken, generateRefreshToken } from "../helpers/auth-helper";
 import bcrypt from "bcryptjs";
-import { ACCESS_COOKIE_OPTIONS, ACCESS_TOKEN_SECRET, REFRESH_COOKIE_OPTIONS, REFRESH_TOKEN_SECRET } from "../utils/constant";
+import { ACCESS_COOKIE_OPTIONS, ACCESS_TOKEN_EXPIRES_IN, ACCESS_TOKEN_SECRET, REFRESH_COOKIE_OPTIONS, REFRESH_TOKEN_EXPIRES_IN, REFRESH_TOKEN_SECRET } from "../utils/constant";
 
 
 export const protectRoute = async (
@@ -15,15 +15,27 @@ export const protectRoute = async (
         const accessToken = req.cookies.accessToken;
         const refreshToken = req.cookies.refreshToken;
 
-        if(accessToken){
-            const decoded = jwt.verify(
-                accessToken,
-                ACCESS_TOKEN_SECRET
-            ) as JwtPayload;
+        if (accessToken) {
+            try {
+                const decoded = jwt.verify(
+                    accessToken,
+                    ACCESS_TOKEN_SECRET
+                ) as JwtPayload;
 
-            (req as any).user = decoded;
+                (req as any).user = decoded;
 
-            return next();
+                return next();
+
+            } catch (error: any) {
+
+                if (error.name !== "TokenExpiredError") {
+                    res.status(401).json({
+                        success: false,
+                        message: "Invalid access token",
+                    });
+                    return;
+                }
+            }
         }
     
 
@@ -75,18 +87,15 @@ export const protectRoute = async (
             return;
         }
 
-        const fifteenMinutes = 15 * 60;
-        const thirtyDays = 30 * 24 * 60 * 60;
-
 
         const newAccessToken = generateAccessToken(
             userId,
-            fifteenMinutes
+            ACCESS_TOKEN_EXPIRES_IN
         );
 
         const newRefreshToken = generateRefreshToken(
             userId,
-            thirtyDays,
+            REFRESH_TOKEN_EXPIRES_IN,
         );
 
         const hashedRefreshToken = await bcrypt.hash(
@@ -98,7 +107,7 @@ export const protectRoute = async (
             $set: {
                 refreshToken: {
                     token: hashedRefreshToken,
-                    expiresIn: thirtyDays,
+                    expiresIn: REFRESH_TOKEN_EXPIRES_IN,
                     createdAt: new Date(),
                 },
             },
@@ -116,13 +125,14 @@ export const protectRoute = async (
             REFRESH_COOKIE_OPTIONS
         );
 
-        (req as any).user = {
-            id: userId,
-        };
+        (req as any).user = decodedRefresh;
 
         next();
     } catch (error) {
         console.error("protectRoute error:", error);
+
+        res.clearCookie("accessToken");
+        res.clearCookie("refreshToken");
 
         res.status(401).json({
             success: false,

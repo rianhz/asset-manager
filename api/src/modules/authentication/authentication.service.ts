@@ -2,8 +2,9 @@ import bcrypt from 'bcryptjs';
 import { generateAccessToken, generateRefreshToken } from '../../helpers/auth-helper';
 import { UserModel } from '../users/users.model';
 import { IUser } from '../users/users.interface';
+import { ACCESS_TOKEN_EXPIRES_IN, REFRESH_TOKEN_EXPIRES_IN } from '../../utils/constant';
 
-const registerService = async (email: string, password: string): Promise<void> => {
+const registerService = async (email: string, password: string, name: string): Promise<void> => {
     const existingUser = await UserModel.findOne({ email }).lean();
     if (existingUser) {
         if (existingUser.googleId && !existingUser.passwordHash) {
@@ -13,7 +14,7 @@ const registerService = async (email: string, password: string): Promise<void> =
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
-    await UserModel.create({ email, passwordHash });
+    await UserModel.create({ email, passwordHash, name });
 };
 
 const loginService = async (email: string, password: string): Promise<{ accessToken: string, refreshToken: string }> => {
@@ -31,18 +32,15 @@ const loginService = async (email: string, password: string): Promise<{ accessTo
         throw new Error('Invalid email or password');
     }
 
-    const fifteenMinutes = 1 * 60;
-    const thirtyDays = 30 * 24 * 60 * 60;
-
-    const accessToken = generateAccessToken((user._id).toString(), fifteenMinutes); 
-    const refreshToken = generateRefreshToken((user._id).toString(), thirtyDays);
+    const accessToken = generateAccessToken((user._id).toString(), ACCESS_TOKEN_EXPIRES_IN); 
+    const refreshToken = generateRefreshToken((user._id).toString(), REFRESH_TOKEN_EXPIRES_IN);
     const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
 
     await UserModel.findByIdAndUpdate(user._id, { 
         $set: { 
             refreshToken: { 
                 token: hashedRefreshToken, 
-                expiresIn: thirtyDays, 
+                expiresIn: REFRESH_TOKEN_EXPIRES_IN, 
                 createdAt: new Date() 
             } 
         } 
@@ -61,7 +59,7 @@ const googleAuthService = async (googleData: { googleId: string; email: string; 
     if (user) {
         if (!user.googleId) {
             user.googleId = googleId;
-            if (!user.avatar && avatar) user.avatar = avatar; // merge avatar if empty
+            if (!user.avatar && avatar) user.avatar = avatar;
             await user.save();
         }
     } else {
@@ -74,21 +72,28 @@ const googleAuthService = async (googleData: { googleId: string; email: string; 
     }
 
     const userObj = user.toObject ? user.toObject() : user;
-    const accessToken = generateAccessToken((userObj._id).toString(), 15); 
-    const refreshToken = generateRefreshToken((userObj._id).toString(), 30); 
+    const accessToken = generateAccessToken((userObj._id).toString(), ACCESS_TOKEN_EXPIRES_IN); 
+    const refreshToken = generateRefreshToken((userObj._id).toString(), REFRESH_TOKEN_EXPIRES_IN); 
 
     const { passwordHash: _, ...userWithoutPassword } = userObj;
     return { user: userWithoutPassword, accessToken, refreshToken };
 };
 
 const logoutService = async (userId: string): Promise<void> => {
-    const user = await UserModel.findById(userId);
-    if (!user) {
-        throw new Error('User not found');
-    }
-
     await UserModel.findByIdAndUpdate(userId, { $set: { refreshToken: { token: null, expiresIn: null, createdAt: null } } });
 };
 
+const meService = async (userId: string) => {
+    const user = await UserModel.findById(userId)
+        .select("-passwordHash -refreshToken")
+        .lean();
 
-export { registerService, loginService, googleAuthService, logoutService };
+    if (!user) {
+        throw new Error("User not found");
+    }
+
+    return user;
+};
+
+
+export { registerService, loginService, googleAuthService, logoutService, meService };

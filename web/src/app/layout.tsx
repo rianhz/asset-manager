@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Toaster from "@/src/components/toaster/Toaster";
-import ReactQueryProvider from "../providers/ReactQueryProvider";
 import { ThemeProvider } from "../providers/ThemeProvider";
 import StoreProvider from "../providers/StoreProvider";
-import AuthProvider from "../providers/AuthProvider";
+import ReactQueryProvider from "../providers/ReactQueryProvider";
+import AuthServerProvider from "../providers/AuthServerProvider";
 
 export const metadata: Metadata = {
   title: "Asset Manager",
@@ -22,10 +22,10 @@ export default function RootLayout({
         <ReactQueryProvider>
           <StoreProvider>
               <ThemeProvider>
-                <AuthProvider>
+                <AuthServerProvider>
                   <Toaster />
                   {children}
-                </AuthProvider>
+                </AuthServerProvider>
               </ThemeProvider>
           </StoreProvider>
         </ReactQueryProvider>

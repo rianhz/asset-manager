@@ -1,19 +1,19 @@
 import { Request, Response, NextFunction } from 'express';
-import { registerService, loginService, googleAuthService, logoutService } from './authentication.service';
+import { registerService, loginService, googleAuthService, logoutService, meService } from './authentication.service';
 import { ACCESS_COOKIE_OPTIONS, REFRESH_COOKIE_OPTIONS } from '../../utils/constant';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
 
 export const registerController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const { email, password } = req.body;
+        const { email, password, name } = req.body;
         
         if (!email || !password) {
             res.status(400).json({ success: false, message: 'Email and password are required' });
             return;
         }
 
-        await registerService(email, password);
+        await registerService(email, password, name);
         res.status(201).json({ success: true, message: 'User registered successfully' });
     } catch (error: any) {
         res.status(400).json({ success: false, message: error.message });
@@ -42,16 +42,31 @@ export const loginController = async (req: Request, res: Response, next: NextFun
     }
 };
 
-export const logoutController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-        const decoded = jwt.verify(req.cookies.accessToken, process.env.JWT_ACCESS_SECRET as string) as JwtPayload;
-        await logoutService(decoded.id);
+export const logoutController = async (
+    req: Request,
+    res: Response
+): Promise<void> => {
 
-        res.clearCookie('accessToken');
-        res.clearCookie('refreshToken');
-        res.status(200).json({ success: true, message: 'Logged out successfully' });
+    try {
+
+        const userId = (req as any).user.id;
+
+        await logoutService(userId);
+
+        res.clearCookie("accessToken", ACCESS_COOKIE_OPTIONS);
+        res.clearCookie("refreshToken", REFRESH_COOKIE_OPTIONS);
+
+        res.status(200).json({
+            success: true,
+            message: "Logged out successfully",
+        });
+
     } catch (error: any) {
-        res.status(401).json({ success: false, message: error.message });
+
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
     }
 };
 
@@ -79,5 +94,28 @@ export const googleCallbackController = async (req: Request, res: Response, next
         
     } catch (error: any) {
         return res.redirect(`${process.env.FRONTEND_URL}/login?error=${encodeURIComponent(error.message)}`);
+    }
+};
+
+export const meController = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const userId = (req as any).user.id;
+
+        const user = await meService(userId);
+
+        res.status(200).json({
+            success: true,
+            data: user,
+        });
+
+    } catch (error: any) {
+        res.status(404).json({
+            success: false,
+            message: error.message,
+        });
     }
 };

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { registerController, loginController, googleCallbackController, logoutController } from './authentication.controller';
+import { registerController, loginController, googleCallbackController, logoutController, meController } from './authentication.controller';
 import { protectRoute } from '../../middleware/auth-middleware';
 
 const router = Router();
@@ -7,6 +7,7 @@ const router = Router();
 router.post('/register', registerController);
 router.post('/login', loginController);
 router.post('/logout', protectRoute, logoutController);
+router.get('/me', protectRoute, meController);
 router.get('/google/callback', googleCallbackController);
 
 export const authRoutes = router;
