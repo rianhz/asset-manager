@@ -1,11 +1,11 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { getMyProfile, login, logout, register } from "@/src/features/auth/api";
+import { getMyProfile, login, logout, register } from "@/features/auth/api";
 import { toast } from "sonner";
-import { logout as logoutAction, setUser } from "@/src/lib/store/reducers/userSlice";
+import { logout as logoutAction, setUser } from "@/lib/store/reducers/userSlice";
 import { useRouter } from "next/navigation";
-import { useAppDispatch } from "@/src/lib/store/hooks/hooks";
+import { useAppDispatch } from "@/lib/store/hooks/hooks";
 import { AuthResponse } from "./authTypes";
-import { IUser } from "@/src/types/users";
+import { IUser } from "@/types/users";
 import { getProfile } from "../users/api";
 
 

@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import AuthProvider from "./AuthProvider";
-import { getMyProfile } from "@/src/features/auth/api";
+import { getMyProfile } from "@/features/auth/api";
 
 export default async function AuthServerProvider({
     children,

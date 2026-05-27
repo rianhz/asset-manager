@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import BaseLoggedInLayout from "@/components/layouts/BaseLoggedInLayout";
+import { BaseBreadcrumbs } from "@/components/base/BaseBreadcrumbs";
 
 export const metadata: Metadata = {
-  title: "Dashboard",
-  description: "Dashboard - Asset Manager",
+  title: "Shared Drive",
+  description: "Shared Drive - Asset Manager",
 };
 
-export default function DashboardLayout({
+export default function SharedLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getProfile } from "./api";
-import { IUser } from "@/src/types/users";
+import { IUser } from "@/types/users";
 
 // export const useGetProfile = () => {
 //   return useQuery<IUser | null, Error>({

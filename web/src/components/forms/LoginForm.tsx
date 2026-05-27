@@ -2,9 +2,9 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoginFormValues, loginSchema } from "@/src/features/auth/authValidator";
-import { useLogin } from "@/src/features/auth/hooks";
-import BaseButton from "../base/BaseButton";
+import { LoginFormValues, loginSchema } from "@/features/auth/authValidator";
+import { useLogin } from "@/features/auth/hooks";
+import BaseButton from "@/components/base/BaseButton";
 
 export default function LoginForm() {
   const {
@@ -18,12 +18,12 @@ export default function LoginForm() {
   const { mutate: loginMutation, isPending } = useLogin();
 
   const onSubmit = async (values: LoginFormValues) => {
-    loginMutation(values);
+    loginMutation(values as any);
   };
 
   return (
     <form
-      className="space-y-4 dark:text-white min-w-96"
+      className="space-y-4 min-w-96"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div>
@@ -34,13 +34,17 @@ export default function LoginForm() {
         <input
           type="email"
           placeholder="hello@example.com"
+          autoCorrect="off"
+          autoCapitalize="off"
+          autoComplete="off"
+          spellCheck="false"
+          autoFocus={false}
           {...register("email")}
           className="
             w-full
             rounded-2xl
             border
             border-border
-            bg-white dark:bg-surface-secondary
             px-4
             py-4
             outline-none
@@ -71,7 +75,6 @@ export default function LoginForm() {
             rounded-2xl
             border
             border-border
-            bg-white dark:bg-surface-secondary
             px-4
             py-4
             outline-none

@@ -1,19 +1,16 @@
 "use client";
 
-import { Button, Spinner } from "@heroui/react";
-import LoadingSpinner from "../loader/LoadingSpinner";
-import clsx from "clsx";
+import { Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 type ButtonVariant =
-
   | "primary"
   | "secondary"
   | "tertiary"
-
   | "outline"
   | "ghost"
   | "danger"
-
   | "danger-soft";
 
 interface BaseButtonProps {
@@ -26,7 +23,13 @@ interface BaseButtonProps {
   type?: "button" | "submit" | "reset";
   size?: "sm" | "md" | "lg";
   isIconOnly?: boolean;
-  rounded?: "rounded-2xl" | "rounded-lg" | "rounded-md" | "rounded-sm" | "rounded-none";
+  rounded?:
+    | "rounded-2xl"
+    | "rounded-lg"
+    | "rounded-md"
+    | "rounded-sm"
+    | "rounded-none";
+  asChild?: boolean;
 }
 
 export default function BaseButton({
@@ -40,30 +43,59 @@ export default function BaseButton({
   size = "md",
   isIconOnly = false,
   rounded = "rounded-2xl",
+  asChild = false,
 }: BaseButtonProps) {
+  const variantMap: Record<
+    ButtonVariant,
+    "default" | "secondary" | "outline" | "ghost" | "destructive" | string
+  > = {
+    primary: "default",
+    secondary: "secondary",
+    tertiary: "outline",
+    outline: "outline",
+    ghost: "ghost",
+    danger: "destructive",
+    "danger-soft": "bg-destructive/10 text-destructive hover:bg-destructive/20",
+  };
+
+  const selectedVariant = variantMap[variant];
 
   return (
     <Button
       type={type}
-      onPress={onClick}
-      variant={variant as any}
-      size={size}
-      fullWidth={fullWidth}
-      className={clsx(
+      onClick={onClick}
+      asChild={asChild}
+      disabled={loading}
+      variant={
+        typeof selectedVariant === "string" &&
+        !["default", "secondary", "outline", "ghost", "destructive"].includes(
+          selectedVariant
+        )
+          ? "default"
+          : (selectedVariant as any)
+      }
+      size={size === "md" ? "default" : size}
+      className={cn(
         rounded,
-        "font-semibold ",
-        "flex items-center justify-center gap-2",
+        "font-semibold flex items-center justify-center gap-2 cursor-pointer",
+        fullWidth && "w-full",
+        isIconOnly && "p-2 aspect-square min-w-10",
+        typeof selectedVariant === "string" &&
+          ![
+            "default",
+            "secondary",
+            "outline",
+            "ghost",
+            "destructive",
+          ].includes(selectedVariant) &&
+          selectedVariant,
         className
       )}
-      isPending={loading}
-      isIconOnly={isIconOnly}
     >
-      {({isPending}) => (
-        <>
-          {isPending ? <Spinner color="current" size="sm" /> : null}
-          {children}
-        </>
-      )}
+      <span className="flex items-center gap-2">
+        {loading && <Loader2 className="h-4 w-4 animate-spin shrink-0" />}
+        {children}
+      </span>
     </Button>
   );
 }
