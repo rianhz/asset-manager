@@ -11,7 +11,7 @@ export default function BaseLoggedInNavTop() {
   const { toggleSidebar } = useSidebar();
 
   return (
-    <nav className="fixed top-0 right-0 w-full md:w-[calc(100vw-var(--sidebar-width))]">
+    <nav className="sticky top-0 right-0 w-full md:w-[calc(100vw-var(--sidebar-width))]">
       <header className="flex h-12 items-center justify-between px-6">
         
         <div className="flex items-center gap-4">

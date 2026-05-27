@@ -1,36 +1,74 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarGroupLabel,
+  SidebarGroupContent,
   SidebarHeader,
-  useSidebar,
-} from "@/components/ui/sidebar"
-import BaseLogo from "../base/BaseLogo"
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
+
+import BaseLogo from "../base/BaseLogo";
+
+import {
+  Settings,
+  Home,
+  Workflow,
+  Folders,
+} from "lucide-react";
 
 export function AppSidebar() {
-  const { open, isMobile } = useSidebar();
+  const pathname = usePathname();
+
+  const items = [
+    { title: "Dashboard", url: "/dashboard", icon: Home },
+    { title: "Shared", url: "/shared", icon: Folders },
+    { title: "Integrations", url: "/integrations", icon: Workflow },
+    { title: "Settings", url: "/settings", icon: Settings },
+  ];
+
   return (
-    <Sidebar variant="sidebar" collapsible={isMobile ? "icon" : "none"}>
+    <Sidebar variant="sidebar" collapsible="none">
       <SidebarHeader>
         <div className="flex justify-center items-center py-2">
           <BaseLogo />
         </div>
       </SidebarHeader>
+
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>
-            <h1>Dashboard</h1>
-          </SidebarGroupLabel>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>
-            <h1>Dashboard</h1>
-          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {items.map((item) => {
+                const isActive = pathname === item.url;
+
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isActive}
+                    >
+                      <Link href={item.url}>
+                        <item.icon className="h-4 w-4" />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
+            </SidebarMenu>
+          </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
       <SidebarFooter />
     </Sidebar>
-  )
+  );
 }

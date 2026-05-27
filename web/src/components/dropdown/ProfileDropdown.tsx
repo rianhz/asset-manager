@@ -22,16 +22,11 @@ export const ProfileDropdown = () => {
         </Avatar>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end" className="w-48 p-1">
+      <DropdownMenuContent align="end" className="p-1">
         <DropdownMenuItem className="cursor-pointer rounded-lg font-medium">
           Profile
         </DropdownMenuItem>
         
-        <DropdownMenuItem className="cursor-pointer rounded-lg font-medium">
-          Settings
-        </DropdownMenuItem>
-        
-        {/* Styled to perfectly match your danger-soft look */}
         <DropdownMenuItem 
           onClick={() => logout()}
           className="cursor-pointer rounded-lg font-semibold mt-1 text-destructive focus:text-destructive focus:bg-destructive/10 transition-colors"
