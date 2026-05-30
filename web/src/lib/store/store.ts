@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userSlice from './reducers/userSlice'; 
+import dialogSlice from './reducers/dialogSlice';
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       currentUser: userSlice,
+      dialog: dialogSlice,
     },
   });
 };

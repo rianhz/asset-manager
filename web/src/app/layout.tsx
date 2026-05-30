@@ -3,7 +3,7 @@ import "./globals.css";
 import Toaster from "@/components/toaster/Toaster";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import StoreProvider from "@/providers/StoreProvider";
-import ReactQueryProvider from "@/providers/reactQueryProvider";
+import ReactQueryProvider from "@/providers/ReactQueryProvider";
 import AuthServerProvider from "@/providers/AuthServerProvider";
 import "@uploadthing/react/styles.css";
 import { Geist } from "next/font/google";

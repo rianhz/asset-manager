@@ -31,21 +31,10 @@ export function BaseBreadcrumbs({
 }: {
   breadcrumbs?: BreadcrumbItemType[];
 }) {
-    const dummyBreadcrumbs = [
-    { label: "Home", href: "/" },
-    { label: "Shared", href: "/shared" },
-    { label: "Shared Drive", href: "/shared/1234567890" },
-    { label: "Files", href: "/shared/1234567890/files" },
-    { label: "Settings", href: "/shared/1234567890/settings" },
-    { label: "Users", href: "/shared/1234567890/users" },
-    { label: "Permissions", href: "/shared/1234567890/permissions" },
-    { label: "Sharing", href: "/shared/1234567890/sharing" },
-    { label: "Users", href: "/shared/1234567890/users" },
-    { label: "Permissions", href: "/shared/1234567890/permissions" },
-  ];
+
 
   const items = useMemo<BreadcrumbItemType[]>(() => {
-    return breadcrumbs || dummyBreadcrumbs;
+    return breadcrumbs || [];
   }, [breadcrumbs]);
 
 

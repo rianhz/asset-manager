@@ -112,7 +112,7 @@
 /* ==========================================
    2. TAILWIND V4 EMITTED DESIGN TOKENS MAP
    ========================================== */
-@theme inline {
+@theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -173,6 +173,7 @@
     @apply bg-background text-foreground antialiased;
   }
 }
+
 
 main, section {
   max-width: 80rem;
