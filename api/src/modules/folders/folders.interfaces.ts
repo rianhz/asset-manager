@@ -1,7 +1,9 @@
+import { IFile } from "../files/files.interfaces";
+
 export interface IFolder {
     _id: string;
     name: string;
-    parentId: string;
+    parentId: null | string;
     rootId: string;
     ancestors: {
         _id: string;
@@ -15,6 +17,8 @@ export interface IFolder {
     isDeleted: boolean;
     createdAt: Date;
     updatedAt: Date;
+    folders: IFolder[];
+    files: IFile[];
 }
 
 export interface CreateFolderPayload {

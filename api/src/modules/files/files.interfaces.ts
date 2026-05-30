@@ -4,20 +4,15 @@ export interface IFile {
     originalName: string;
     mimeType: string;
     size: number;
-    folderId: string;
+    folderId: string | null;
     ownerId: string;
-    visibility: "public" | "private";
-    members: {
-        userId: string;
-        role: "owner" | "editor" | "viewer";
-    }[];
     isDeleted: boolean;
     createdAt: Date;
     updatedAt: Date;
 }
 
 export interface UploadFilePayload {
-    folderId: string;
+    folderId: string | null;
     name: string;
     originalName: string;
     mimeType: string;

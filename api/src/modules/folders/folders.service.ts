@@ -10,7 +10,7 @@ export const createRootFolder = async ({
   const folder = await Folder.create({
     name,
     ownerId: userId,
-    parentId: "",
+    parentId: null,
     ancestors: [],
     depth: 0,
   });
@@ -53,6 +53,15 @@ export const createFolder = async ({
   });
 
   return folder;
+};
+
+export const getUserFolders = async (userId: string): Promise<IFolder[]> => {
+  const allFolders = await Folder.find({
+    ownerId: userId,
+    isDeleted: false,
+  }).sort({ depth: 1, name: 1 });
+
+  return allFolders;
 };
 
 export const shareFolder = async ({
@@ -115,4 +124,47 @@ export const getFolderExplorer = async ({
     files,
     breadcrumbs,
   };
+};
+
+export const getUserRootFolders = async (userId: string): Promise<IFolder[]> => {
+  const rootFolders = await Folder.find({
+    ownerId: userId,
+    isDeleted: false,
+    parentId: null,
+  }).sort({ name: 1 });
+
+  return rootFolders;
+};
+
+export const editFolder = async ({ folderId, payload }: { folderId: string, payload: IFolder }) => {
+    await Folder.findByIdAndUpdate(folderId, payload);
+}
+
+export const renameFolder = async ({ folderId, name }: { folderId: string, name: string }) => {
+    await Folder.findByIdAndUpdate(folderId, { name });
+}
+
+export const deleteFolder = async ({ folderId }: { folderId: string }) => {
+    await Folder.findByIdAndUpdate(folderId, { isDeleted: true });
+}
+
+export const permanentlyDeleteFolder = async ({ folderId }: { folderId: string }) => {
+  await Folder.findByIdAndDelete(folderId);
+}
+
+export const restoreFolder = async ({ folderId }: { folderId: string }) => {
+  await Folder.findByIdAndUpdate(folderId, { isDeleted: false });
+}
+
+export const getDeletedFoldersWithin30Days = async (userId: string) => {
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+  const recycleBin = await Folder.find({
+    ownerId: userId,
+    isDeleted: true,
+    updatedAt: { $gte: thirtyDaysAgo }, 
+  }).sort({ updatedAt: -1 });
+
+  return recycleBin;
 };

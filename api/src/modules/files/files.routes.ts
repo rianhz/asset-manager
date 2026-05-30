@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { deleteFileController, getFileController, uploadFileController } from "./files.controller";
+import { getAllUserFilesController, getFileController, uploadFileController } from "./files.controller";
 
 const router = Router();
 
 router.post('/upload', uploadFileController);
 router.get('/:id', getFileController);
-router.delete('/:id', deleteFileController);
+router.get("/user/files", getAllUserFilesController);
 
 export default router;

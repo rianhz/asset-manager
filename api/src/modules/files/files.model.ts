@@ -5,19 +5,21 @@ const fileSchema = new Schema(
     folderId: {
       type: Schema.Types.ObjectId,
       ref: "Folder",
-      required: true,
+      required: false,
+      default: null,
     },
 
     rootId: {
       type: Schema.Types.ObjectId,
       ref: "Folder",
-      required: true,
+      required: false,
+      default: null,
     },
 
     ownerId: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      default: null,
+      required: true,
     },
 
     name: {

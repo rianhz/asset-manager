@@ -17,7 +17,7 @@ app.use(helmet())
 app.use(cookieParser());
 app.use('/auth', authRoutes);
 app.use('/users',protectRoute, usersRoutes);
-app.use('/folders', foldersRoutes);
-app.use('/files', filesRoutes);
+app.use('/folders',protectRoute, foldersRoutes);
+app.use('/files', protectRoute, filesRoutes);
 
 export default app;
