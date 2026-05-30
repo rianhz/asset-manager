@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo } from "react";
+import { useRouter } from "next/navigation"; // 1. Import useRouter
 import {
   Breadcrumb,
   BreadcrumbEllipsis,
@@ -20,6 +21,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { ArrowLeft } from "lucide-react";
 
 type BreadcrumbItemType = {
   label: string;
@@ -31,19 +33,36 @@ export function BaseBreadcrumbs({
 }: {
   breadcrumbs?: BreadcrumbItemType[];
 }) {
-
-
+  const router = useRouter();
   const items = useMemo<BreadcrumbItemType[]>(() => {
     return breadcrumbs || [];
   }, [breadcrumbs]);
 
-
+  const goToDashboard = () => {
+    router.push("/dashboard");
+  }
 
   const shouldCollapse = items?.length > 4;
 
   const firstItem = items[0];
   const lastItems = shouldCollapse ? items.slice(-2) : items.slice(1);
   const hiddenItems = shouldCollapse ? items.slice(1, -2) : [];
+
+   if (items.length === 1) {
+    return (
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <BreadcrumbLink asChild>
+            <Link href="/dashboard">Dashboard</Link>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbPage>{items[0].label}</BreadcrumbPage>
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    );
+  }
 
   return (
     <Breadcrumb>

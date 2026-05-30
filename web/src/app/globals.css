@@ -5,9 +5,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* ==========================================
-   1. SINGLE CONSOLIDATED DESIGN SYSTEM TOKENS
-   ========================================== */
 :root,
 .light,
 .default,
@@ -15,23 +12,19 @@
 [data-theme="default"] {
   color-scheme: light;
   
-  /* Core Base Colors */
   --background: oklch(97.02% 0.0015 225.00);
   --foreground: oklch(21.03% 0.0015 225.00);
   
-  /* Components & Sheets */
   --card: oklch(100.00% 0.0008 225.00);
   --card-foreground: oklch(21.03% 0.0015 225.00);
   --popover: oklch(100.00% 0.0008 225.00);
   --popover-foreground: oklch(21.03% 0.0015 225.00);
   
-  /* Semantic Brand Vectors */
   --primary: oklch(78.00% 0.1600 225.00); /* Maps to your old --accent */
   --primary-foreground: oklch(15% 0.0300 225.00);
   --secondary: oklch(94.00% 0.0015 225.00); /* Maps to your old --default */
   --secondary-foreground: oklch(21.03% 0.0059 225.00);
   
-  /* Feedback states */
   --muted: oklch(95.24% 0.0012 225.00);
   --muted-foreground: oklch(55.17% 0.0030 225.00);
   --accent: oklch(94.00% 0.0015 225.00);
@@ -39,16 +32,13 @@
   --destructive: oklch(65.32% 0.2335 22.28); /* Maps to your old --danger */
   --destructive-foreground: oklch(99.11% 0 0);
   
-  /* System Borders & Frameworks */
   --border: oklch(90.00% 0.0015 225.00);
   --input: oklch(92.00% 0.0015 225.00);
   --ring: oklch(78.00% 0.1600 225.00);
   
-  /* Layout Structures */
   --surface: oklch(100.00% 0.0008 225.00);
   --surface-secondary: oklch(95.24% 0.0012 225.00);
   
-  /* Sidebar Variables */
   --sidebar: oklch(100.00% 0.0008 225.00);
   --sidebar-foreground: oklch(21.03% 0.0015 225.00);
   --sidebar-primary: oklch(78.00% 0.1600 225.00);
@@ -109,9 +99,6 @@
   --sidebar-ring: oklch(78.00% 0.1600 225.00);
 }
 
-/* ==========================================
-   2. TAILWIND V4 EMITTED DESIGN TOKENS MAP
-   ========================================== */
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -136,15 +123,12 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  /* Layout Structure Mapping Extensions */
   --color-surface: var(--surface);
   --color-surface-secondary: var(--surface-secondary);
   
-  /* Custom Image Uploader Tints */
   --color-upload: #8b5cf6;
   --color-upload-hover: #7c3aed;
 
-  /* Sidebar Component Mapping Definitions */
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -154,7 +138,6 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* Radius Scales */
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -162,9 +145,7 @@
   --radius-2xl: calc(var(--radius) * 1.8);
 }
 
-/* ==========================================
-   3. STRUCTURAL UTILITIES & PACKAGED PLUGINS
-   ========================================== */
+
 @layer base {
   * {
     @apply border-border;

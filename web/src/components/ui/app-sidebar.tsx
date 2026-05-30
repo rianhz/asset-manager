@@ -13,6 +13,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 
 import BaseLogo from "../base/BaseLogo";
@@ -22,6 +23,7 @@ import {
   Home,
   Workflow,
   Folders,
+  Trash,
 } from "lucide-react";
 
 export function AppSidebar() {
@@ -34,8 +36,10 @@ export function AppSidebar() {
     { title: "Settings", url: "/settings", icon: Settings },
   ];
 
+  const { isMobile} = useSidebar();
+
   return (
-    <Sidebar variant="sidebar" collapsible="none">
+    <Sidebar variant="sidebar" collapsible={!isMobile ? 'none' : 'offcanvas'}>
       <SidebarHeader>
         <div className="flex justify-center items-center py-2">
           <BaseLogo />
@@ -68,7 +72,18 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter />
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <Link href="/recycle-bin">
+                <Trash className="h-4 w-4" />
+                <span>Recycle Bin</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }

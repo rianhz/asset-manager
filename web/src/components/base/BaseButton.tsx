@@ -30,6 +30,7 @@ interface BaseButtonProps {
     | "rounded-sm"
     | "rounded-none";
   asChild?: boolean;
+  disabled?: boolean;
 }
 
 export default function BaseButton({
@@ -44,6 +45,7 @@ export default function BaseButton({
   isIconOnly = false,
   rounded = "rounded-2xl",
   asChild = false,
+  disabled = false,
 }: BaseButtonProps) {
   const variantMap: Record<
     ButtonVariant,
@@ -65,7 +67,7 @@ export default function BaseButton({
       type={type}
       onClick={onClick}
       asChild={asChild}
-      disabled={loading}
+      disabled={loading || disabled}
       variant={
         typeof selectedVariant === "string" &&
         !["default", "secondary", "outline", "ghost", "destructive"].includes(

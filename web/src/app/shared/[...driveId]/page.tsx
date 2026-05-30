@@ -1,6 +1,6 @@
 "use client";
 import { BaseBreadcrumbs } from "@/components/base/BaseBreadcrumbs";
-import BaseButton from "@/components/base/BaseButton";
+import { FolderFileButton } from "@/components/buttons/FolderFileButton";
 
 export default function SharedPage() {
 
@@ -31,12 +31,13 @@ export default function SharedPage() {
       <main>
         <section className="flex justify-start flex-wrap gap-4 mt-8">
             {dummyDriveId.map((drive) => (
-                <BaseButton
+                <FolderFileButton
                     key={drive.id}
-                    variant="outline"
+                    itemId={drive.id}
+                    value={drive.label}
                 >
                     {drive.label}
-                </BaseButton>
+                </FolderFileButton>
             ))}
         </section>
       </main>
